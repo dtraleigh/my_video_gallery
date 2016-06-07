@@ -5,8 +5,13 @@
 
   <div class="jumbotron">
     <h1>Hello, world!</h1>
-    <p>...</p>
-    <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
+    <video id="my-video" class="video-js" controls preload="auto" width="640" height="264" data-setup="{}">
+    <source src="{% static "videos/playing_on_the_couch_2016-03-24.mp4" %}" type='video/mp4'>
+    <p class="vjs-no-js">
+      To view this video please enable JavaScript, and consider upgrading to a web browser that
+      <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+    </p>
+  </video>
   </div>
 
 {%endblock content%}
