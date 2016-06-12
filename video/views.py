@@ -40,3 +40,18 @@ def main(request):
     albums = album.objects.all()
 
     return render(request, 'index.html', {'albums':albums})
+
+@login_required(login_url='/')
+def album_view(request, album_id):
+    video_album = album.objects.get(id=album_id)
+    album_videos = [v for v in video_album.videos.all()]
+
+    return render(request, 'album.html', {'album':video_album, 'album_videos':album_videos})
+
+@login_required(login_url='/')
+def video_view(request, album_id, video_id):
+    this_video = video.objects.get(id=video_id)
+    video_album = album.objects.get(id=album_id)
+    album_videos = [v for v in video_album.videos.all()]
+
+    return render(request, 'video.html', {'video':this_video, 'album':video_album, 'album_videos':album_videos})

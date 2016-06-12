@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+  {% block content %}
+  {% load staticfiles %}
+
+  <ol class="breadcrumb">
+    <li>Albums</li>
+    <li><a href="/album/{{album.id}}">{{album.name}}</a></li>
+    <li class="active">{{video.name}}</li>
+  </ol>
+
+  <div class="row">
+    <div class="row well well-lg">
+      <div class="col-sm-6 col-xs-12">
+        <div class="embed-responsive embed-responsive-16by9">
+          <video id="my-video" class="video-js embed-responsive-item" controls preload="auto" width="640" height="264"
+          poster="{{ MEDIA_URL }}/{{video.poster}}" data-setup="{}">
+            <source src="{{ MEDIA_URL }}/{{video.video_file}}" type='video/mp4'>
+            <p class="vjs-no-js">
+              To view this video please enable JavaScript, and consider upgrading to a web browser that
+              <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+            </p>
+          </video>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xs-12">
+        <h3>{{video.name}}</h3>
+        <p>{{video.description}}</p>
+        <p>Date Taken: <strong>{{video.video_date}}</strong></p>
+      </div>
+    </div>
+  </div>
+
+{%endblock content%}

@@ -14,7 +14,7 @@ class video(models.Model):
 
 class album(models.Model):
     date_added = models.DateTimeField(auto_now_add=True, verbose_name='Date added')
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, unique=True)
     videos = models.ManyToManyField('video', default=None, blank=True)
     description = models.TextField(default=None, blank=True, null=True)
     poster = models.FileField(upload_to='poster/%Y/%m/')
@@ -24,7 +24,7 @@ class album(models.Model):
 
 class tag(models.Model):
     date_added = models.DateTimeField(auto_now_add=True, verbose_name='Date added')
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, unique=True)
 
     def __str__(self):
         return '%s' % (self.name)

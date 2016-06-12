@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+  {% block content %}
+  {% load staticfiles %}
+
+	<h1>{{album.name}}</h1>
+  <div class="row">
+    {%for video in album_videos%}
+    <div class="col-sm-6 col-xs-12">
+      <div class="well well-lg">
+        <a href="/album/{{album.id}}/video/{{video.id}}"><img src="{{ MEDIA_URL }}/{{video.poster}}" class="img-responsive center-block" /></a>
+        <h4>{{video.name}}</h4>
+        <p>{{video.description}}</p>
+      </div>
+    </div>
+  {%if forloop.counter|divisibleby:2%}
+  </div>
+  <div class="row">
+  {%endif%}
+  {%endfor%}
+  </div>
+
+{%endblock content%}
