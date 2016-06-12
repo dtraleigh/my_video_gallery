@@ -4,6 +4,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
+from video.models import album, video, tag
+
 def video_login(request):
     #///
     #This is the login page. The site is supposed to be password protected.
@@ -35,10 +37,6 @@ def video_logout(request):
 
 @login_required(login_url='/')
 def main(request):
+    albums = album.objects.all()
 
-    return render(request, 'index.html')
-
-@login_required(login_url='/')
-def upload(request):
-
-    return render(request, 'upload.html')
+    return render(request, 'index.html', {'albums':albums})

@@ -4,5 +4,8 @@
   {% load staticfiles %}
 
   This is the main page.
+  {%for album in albums%}
+    <img src="{{ MEDIA_URL }}/{{album.poster}}" />
+  {%endfor%}
 
 {%endblock content%}
