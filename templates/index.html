@@ -3,9 +3,18 @@
   {% block content %}
   {% load staticfiles %}
 
-  This is the main page.
-  {%for album in albums%}
-    <img src="{{ MEDIA_URL }}/{{album.poster}}" />
+	{%for album in albums%}
+  <div class="row well well-lg">
+		<div class="col-md-4 col-sm-4 col-xs-12">
+      <a href="/album/{{album.id}}"><img src="{{ MEDIA_URL }}/{{album.poster}}" class="img-responsive center-block" /></a>
+    </div>
+    <div class="col-md-8 col-sm-8 col-xs-12">
+      <a href="/album/{{album.id}}"><h2>{{album.name}}</h2></a>
+      <p>{{album.description}}</p>
+    </div>
+  </div>
+  {%empty%}
+  	<p>No albums created.</p>
   {%endfor%}
 
 {%endblock content%}
