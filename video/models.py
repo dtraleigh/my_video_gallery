@@ -10,7 +10,7 @@ class video(models.Model):
     tags = models.ManyToManyField('tag', default=None, blank=True)
 
     def __str__(self):
-        return '%s' % (self.name)
+        return '%s, taken on %s' % (self.name, self.video_date)
 
 class album(models.Model):
     date_added = models.DateTimeField(auto_now_add=True, verbose_name='Date added')
