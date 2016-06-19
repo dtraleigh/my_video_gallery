@@ -8,7 +8,12 @@
     {%for video in album_videos%}
     <div class="col-sm-6 col-xs-12">
       <div class="well well-lg">
+        <!--
         <a href="/album/{{album.id}}/video/{{video.id}}"><img src="{{ MEDIA_URL }}/{{video.poster}}" class="img-responsive center-block" /></a>
+      -->
+        <a href="/album/{{album.id}}/video/{{video.id}}">
+          <div class="album-poster" style="background-image:url({{ MEDIA_URL }}/{{video.poster}});"></div>
+        </a>
         <h4>{{video.name}}</h4>
         <p>{{video.description}}</p>
       </div>
