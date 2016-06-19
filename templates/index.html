@@ -10,7 +10,9 @@
     </div>
     <div class="col-md-8 col-sm-8 col-xs-12">
       <a href="/album/{{album.id}}"><h2>{{album.name}}</h2></a>
+      {% autoescape off %}
       <p>{{album.description}}</p>
+      {%endautoescape%}
     </div>
   </div>
   {%empty%}

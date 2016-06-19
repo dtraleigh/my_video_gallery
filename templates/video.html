@@ -25,7 +25,9 @@
       </div>
       <div class="col-md-6 col-sm-4 col-xs-12">
         <h3>{{video.name}}</h3>
+        {% autoescape off %}
         <p>{{video.description}}</p>
+        {%endautoescape%}
         <p>Date Taken: <strong>{{video.video_date}}</strong></p>
       </div>
     </div>

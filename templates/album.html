@@ -15,7 +15,9 @@
           <div class="album-poster" style="background-image:url({{ MEDIA_URL }}/{{video.poster}});"></div>
         </a>
         <h4>{{video.name}}</h4>
+        {% autoescape off %}
         <p>{{video.description}}</p>
+        {%endautoescape%}
       </div>
     </div>
   {%if forloop.counter|divisibleby:2%}
