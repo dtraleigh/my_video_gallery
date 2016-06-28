@@ -38,8 +38,10 @@ def video_logout(request):
 @login_required(login_url='/')
 def main(request):
     albums = album.objects.all()
+    tag_list = tag.objects.all()
 
-    return render(request, 'index.html', {'albums':albums})
+    return render(request, 'index.html', {'albums':albums,
+                                        'tag_list':tag_list})
 
 @login_required(login_url='/')
 def album_view(request, album_id):
@@ -55,10 +57,13 @@ def video_view(request, album_id, video_id):
     album_videos = [v for v in video_album.videos.all()]
     video_tags = [t for t in this_video.tags.all()]
 
+    album_view = True
+
     return render(request, 'video.html', {'video':this_video,
                                         'album':video_album,
                                         'album_videos':album_videos,
-                                        'video_tags':video_tags})
+                                        'video_tags':video_tags,
+                                        'album_view':album_view})
 
 @login_required(login_url='/')
 def tag_view(request, tag_name):
@@ -66,3 +71,16 @@ def tag_view(request, tag_name):
     the_tag = tag.objects.get(name=tag_name)
 
     return render(request, 'tag.html', {'videos_w_tag':videos_w_tag, 'the_tag':the_tag})
+
+@login_required(login_url='/')
+def video_tag_view(request, tag_name, video_id):
+    this_video = video.objects.get(id=video_id)
+    the_tag = tag.objects.get(name=tag_name)
+    video_tags = [t for t in this_video.tags.all()]
+
+    tag_view = True
+
+    return render(request, 'video.html', {'video':this_video,
+                                        'the_tag':the_tag,
+                                        'video_tags':video_tags,
+                                        'tag_view':tag_view})

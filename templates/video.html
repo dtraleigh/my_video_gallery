@@ -4,8 +4,13 @@
   {% load staticfiles %}
 
   <ol class="breadcrumb">
-    <li>Albums</li>
-    <li><a href="/album/{{album.id}}">{{album.name}}</a></li>
+    {%if album_view%}
+      <li>Albums</li>
+      <li><a href="/album/{{album.id}}">{{album.name}}</a></li>
+    {%elif tag_view%}
+      <li>Tag</li>
+      <li><a href="/tag/{{the_tag.name}}">{{the_tag.name}}</a></li>
+    {%endif%}
     <li class="active">{{video.name}}</li>
   </ol>
 
@@ -30,7 +35,9 @@
         {%endautoescape%}
         <p>Date Taken: <strong>{{video.video_date}}</strong></p>
         <strong>Tags</strong>
-        <a class="btn btn-default" href="#" role="button">Link</a>
+        {%for tag in video_tags%}
+          <a class="btn btn-default" href="/tag/{{tag.name}}" role="button">{{tag.name}}</a>
+        {%endfor%}
       </div>
     </div>
   </div>

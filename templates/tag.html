@@ -3,15 +3,12 @@
   {% block content %}
   {% load staticfiles %}
 
-	<h1>Videos tagged "{{the_tag.name}}""</h1>
+	<h1>Videos tagged "{{the_tag.name}}"</h1>
   <div class="row">
     {%for video in videos_w_tag%}
     <div class="col-sm-6 col-xs-12">
       <div class="well well-lg">
-        <!--
-        <a href="/album/{{album.id}}/video/{{video.id}}"><img src="{{ MEDIA_URL }}/{{video.poster}}" class="img-responsive center-block" /></a>
-      -->
-        <a href="/album/{{album.id}}/video/{{video.id}}">
+        <a href="/tag/{{the_tag.name}}/video/{{video.id}}">
           <div class="album-poster" style="background-image:url({{ MEDIA_URL }}/{{video.poster}});"></div>
         </a>
         <h4>{{video.name}}</h4>
