@@ -12,7 +12,7 @@ class video(models.Model):
     lon = models.DecimalField(max_digits=9, decimal_places=6)
 
     class Meta:
-        ordering = ['date_added']
+        ordering = ['-video_date']
 
     def __str__(self):
         return '%s, taken on %s' % (self.name, self.video_date)

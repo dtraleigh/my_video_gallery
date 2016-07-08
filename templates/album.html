@@ -4,6 +4,7 @@
   {% load staticfiles %}
 
 	<h1>{{album.name}}</h1>
+  <p class="text-right"><span class="label label-info">Sorted by Most Recent.</span></p>
   <div class="row">
     {%for video in album_videos%}
     <div class="col-sm-6 col-xs-12">

@@ -4,6 +4,7 @@
   {% load staticfiles %}
 
 	<h1>Videos tagged "{{the_tag.name}}"</h1>
+  <p class="text-right"><span class="label label-info">Sorted by Most Recent.</span></p>
   <div class="row">
     {%for video in videos_w_tag%}
     <div class="col-sm-6 col-xs-12">
