@@ -37,10 +37,29 @@ def video_logout(request):
 
 @login_required(login_url='/')
 def main(request):
-    albums = album.objects.all()
     tag_list = tag.objects.all()
+    albums = album.objects.all()
 
-    return render(request, 'index.html', {'albums':albums,
+    #Go through each album and find the most recent video taken.
+    albums_and_most_recent_date = []
+
+    for an_album in albums:
+        album_videos = [v for v in an_album.videos.all()]
+        most_recent_video = album_videos[0]
+        for a_video in album_videos:
+            if a_video.video_date > most_recent_video.video_date:
+                most_recent_video = a_video
+
+        albums_and_most_recent_date.append([an_album, str(most_recent_video.video_date)])
+
+    albums_sorted_w_date = sorted(albums_and_most_recent_date, key=lambda d: d[1], reverse=True)
+
+    sorted_albums = []
+
+    for an_album in albums_sorted_w_date:
+        sorted_albums.append(an_album[0])
+
+    return render(request, 'index.html', {'albums':sorted_albums,
                                         'tag_list':tag_list})
 
 @login_required(login_url='/')
