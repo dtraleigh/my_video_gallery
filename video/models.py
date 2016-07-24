@@ -8,8 +8,8 @@ class video(models.Model):
     video_file = models.FileField(upload_to='video/%Y/%m/')
     description = models.TextField(default=None, blank=True, null=True)
     tags = models.ManyToManyField('tag', default=None, blank=True)
-    lat = models.DecimalField(max_digits=9, decimal_places=6)
-    lon = models.DecimalField(max_digits=9, decimal_places=6)
+    lat = models.DecimalField(max_digits=9, decimal_places=6, default=0)
+    lon = models.DecimalField(max_digits=9, decimal_places=6, default=0)
 
     class Meta:
         ordering = ['-video_date']
