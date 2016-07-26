@@ -3,11 +3,21 @@
   {% block content %}
   {% load staticfiles %}
 
-  <h2>Video Tags</h2>
   <div class="row well well-lg">
-    {%for tag in tag_list%}
-      <a class="btn btn-primary btn-lg btn-margin" href="/tag/{{tag.name}}" role="button">{{tag.name}}</a>
-    {%endfor%}
+    <div class="col-sm-6 col-xs-12">
+      <h2>Video Tags</h2>
+      {%for tag in tag_list%}
+        <a class="btn btn-primary btn-lg btn-margin" href="/tag/{{tag.name}}" role="button">{{tag.name}}</a>
+      {%endfor%}
+    </div>
+    <div class="col-sm-6 col-xs-12">
+      <h2>Newly added</h2>
+        {%for video in most_recent%}
+          <a href="/recent/{{video.id}}">
+            <img class="album-poster-recent" src="{{ MEDIA_URL }}{{video.poster}}">
+          </a>
+        {%endfor%}
+    </div>
   </div>
 
   <h2>Current Video Albums</h2>

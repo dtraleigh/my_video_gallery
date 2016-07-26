@@ -49,6 +49,11 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
 }
+.album-poster-recent{
+  float: left;
+  width:  50%;
+  padding: 10px;
+}
 .btn-margin{
   margin:5px;
 }

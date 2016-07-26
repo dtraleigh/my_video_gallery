@@ -39,6 +39,7 @@ def video_logout(request):
 def main(request):
     tag_list = tag.objects.all()
     albums = album.objects.all()
+    most_recent = video.objects.all()[0:6]
 
     #Go through each album and find the most recent video taken.
     albums_and_most_recent_date = []
@@ -60,7 +61,8 @@ def main(request):
         sorted_albums.append(an_album[0])
 
     return render(request, 'index.html', {'albums':sorted_albums,
-                                        'tag_list':tag_list})
+                                        'tag_list':tag_list,
+                                        'most_recent':most_recent})
 
 @login_required(login_url='/')
 def album_view(request, album_id):
@@ -103,3 +105,12 @@ def video_tag_view(request, tag_name, video_id):
                                         'the_tag':the_tag,
                                         'video_tags':video_tags,
                                         'tag_view':tag_view})
+
+@login_required(login_url='/')
+def recent_view(request, video_id):
+    this_video = video.objects.get(id=video_id)
+    all_videos = video.objects.all()
+    video_tags = [t for t in this_video.tags.all()]
+
+    return render(request, 'video.html', {'video':this_video,
+                                        'video_tags':video_tags})
