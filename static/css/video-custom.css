@@ -51,9 +51,16 @@ body {
 }
 .album-poster-recent{
   float: left;
-  width:  50%;
+  width: 50%;
+  height: 160.34px;
   padding: 10px;
 }
 .btn-margin{
   margin:5px;
+}
+@media (max-width: 768px) {
+  .album-poster-recent{
+    width: 100%;
+    height: auto;
+  }
 }
