@@ -5,7 +5,7 @@
 
   <ol class="breadcrumb">
     {%if album_view%}
-      <li>Albums</li>
+      <li>Album</li>
       <li><a href="/album/{{album.id}}">{{album.name}}</a></li>
     {%elif tag_view%}
       <li>Tag</li>
@@ -42,25 +42,49 @@
           <a class="btn btn-default" href="/tag/{{tag.name}}" role="button">{{tag.name}}</a>
         {%endfor%}
         </p>
-        <strong>Navigate</strong>
-        <div class="btn-group" role="group" aria-label="...">
+        {%if not no_prev and not no_next%}
+          <p><strong>Navigate</strong><p>
+        {%endif%}
+        <div class=row>
           {%if not no_prev%}
-            {%if album_view%}
-              <a role="button" class="btn btn-default" href="/album/{{album.id}}/video/{{prev_video.id}}">Previous Video</a>
-            {%elif tag_view%}
-              <a role="button" class="btn btn-default" href="/tag/{{the_tag.name}}/video/{{prev_video.id}}">Previous Video</a>
-            {%elif recent_view%}
-              <a role="button" class="btn btn-default" href="/recent/{{prev_video.id}}">Previous Video</a>
-            {%endif%}
+          <div class="col-md-6 col-sm-6 col-xs-6">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Earlier Video</h3>
+              </div>
+              <div class="panel-body">
+                {%if album_view%}
+                    <a href="/album/{{album.id}}/video/{{prev_video.id}}" class="thumbnail">
+                {%elif tag_view%}
+                    <a href="/tag/{{the_tag.name}}/video/{{prev_video.id}}" class="thumbnail">
+                {%elif recent_view%}
+                    <a href="/recent/{{prev_video.id}}" class="thumbnail">
+                {%endif%}
+                  <img src="{{ MEDIA_URL }}/{{prev_video.poster}}" alt="...">
+                </a>
+              </div>
+            </div>
+          </div>
           {%endif%}
           {%if not no_next%}
-            {%if album_view%}
-              <a role="button" class="btn btn-default" href="/album/{{album.id}}/video/{{next_video.id}}">Next Video</a>
-            {%elif tag_view%}
-              <a role="button" class="btn btn-default" href="/tag/{{the_tag.name}}/video/{{next_video.id}}">Next Video</a>
-            {%elif recent_view%}
-              <a role="button" class="btn btn-default" href="/recent/{{next_video.id}}">Next Video</a>
-            {%endif%}
+          <div class="col-md-6 col-sm-6 col-xs-6">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Later Video</h3>
+              </div>
+              <div class="panel-body">
+                {%if album_view%}
+                    <a href="/album/{{album.id}}/video/{{next_video.id}}" class="thumbnail">
+                {%elif tag_view%}
+                    <a href="/tag/{{the_tag.name}}/video/{{next_video.id}}" class="thumbnail">
+                {%elif recent_view%}
+                    <a href="/recent/{{next_video.id}}" class="thumbnail">
+                {%endif%}
+                  <img src="{{ MEDIA_URL }}/{{next_video.poster}}" alt="...">
+                </a>
+              </div>
+            </div>
+          </div>
           {%endif%}
         </div>
       </div>

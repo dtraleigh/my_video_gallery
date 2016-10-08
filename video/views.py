@@ -6,18 +6,14 @@ from django.contrib.auth.decorators import login_required
 
 from video.models import album, video, tag
 
-def is_most_recent(this_video):
-    all_videos = video.objects.all()
-
-    if [i.id for i in all_videos].index(this_video.id) == 0:
+def is_most_recent(this_video, video_list):
+    if [i.id for i in video_list].index(this_video.id) == 0:
         return True
     else:
         return False
 
-def is_oldest(this_video):
-    all_videos = video.objects.all()
-
-    if [i.id for i in all_videos].index(this_video.id) == len(all_videos) - 1:
+def is_oldest(this_video, video_list):
+    if [i.id for i in video_list].index(this_video.id) == len(video_list) - 1:
         return True
     else:
         return False
@@ -108,14 +104,14 @@ def video_view(request, album_id, video_id):
     album_videos = [v for v in video_album.videos.all()]
     video_tags = [t for t in this_video.tags.all()]
 
-    if not is_most_recent(this_video):
+    if not is_most_recent(this_video, album_videos):
         next_video = get_next_video(this_video, album_videos)
         no_next = False
     else:
         next_video = this_video
         no_next = True
 
-    if not is_oldest(this_video):
+    if not is_oldest(this_video, album_videos):
         prev_video = get_prev_video(this_video, album_videos)
         no_prev = False
     else:
@@ -123,7 +119,6 @@ def video_view(request, album_id, video_id):
         no_prev = True
 
     album_view = True
-
 
     return render(request, 'video.html', {'video':this_video,
                                         'album':video_album,
@@ -149,14 +144,14 @@ def video_tag_view(request, tag_name, video_id):
     video_tags = [t for t in this_video.tags.all()]
     videos_w_tag = video.objects.filter(tags__name=tag_name)
 
-    if not is_most_recent(this_video):
+    if not is_most_recent(this_video, videos_w_tag):
         next_video = get_next_video(this_video, videos_w_tag)
         no_next = False
     else:
         next_video = this_video
         no_next = True
 
-    if not is_oldest(this_video):
+    if not is_oldest(this_video, videos_w_tag):
         prev_video = get_prev_video(this_video, videos_w_tag)
         no_prev = False
     else:
@@ -180,14 +175,14 @@ def recent_view(request, video_id):
     all_videos = video.objects.all()
     video_tags = [t for t in this_video.tags.all()]
 
-    if not is_most_recent(this_video):
+    if not is_most_recent(this_video, all_videos):
         next_video = get_next_video(this_video, all_videos)
         no_next = False
     else:
         next_video = this_video
         no_next = True
 
-    if not is_oldest(this_video):
+    if not is_oldest(this_video, all_videos):
         prev_video = get_prev_video(this_video, all_videos)
         no_prev = False
     else:
