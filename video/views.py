@@ -6,6 +6,36 @@ from django.contrib.auth.decorators import login_required
 
 from video.models import album, video, tag
 
+def is_most_recent(this_video):
+    all_videos = video.objects.all()
+
+    if [i.id for i in all_videos].index(this_video.id) == 0:
+        return True
+    else:
+        return False
+
+def is_oldest(this_video):
+    all_videos = video.objects.all()
+
+    if [i.id for i in all_videos].index(this_video.id) == len(all_videos) - 1:
+        return True
+    else:
+        return False
+
+def get_next_video(curr_video, video_list):
+    #Find the position that curr_video is in
+    #next_video is the one in the before after it
+    next_video = video_list[[i.id for i in video_list].index(curr_video.id) - 1]
+
+    return next_video
+
+def get_prev_video(curr_video, video_list):
+    #Find the position that curr_video is in
+    #next_video is the one in the before after it
+    prev_video = video_list[[i.id for i in video_list].index(curr_video.id) + 1]
+
+    return prev_video
+
 def video_login(request):
     #///
     #This is the login page. The site is supposed to be password protected.
@@ -78,13 +108,32 @@ def video_view(request, album_id, video_id):
     album_videos = [v for v in video_album.videos.all()]
     video_tags = [t for t in this_video.tags.all()]
 
+    if not is_most_recent(this_video):
+        next_video = get_next_video(this_video, album_videos)
+        no_next = False
+    else:
+        next_video = this_video
+        no_next = True
+
+    if not is_oldest(this_video):
+        prev_video = get_prev_video(this_video, album_videos)
+        no_prev = False
+    else:
+        prev_video = this_video
+        no_prev = True
+
     album_view = True
+
 
     return render(request, 'video.html', {'video':this_video,
                                         'album':video_album,
                                         'album_videos':album_videos,
                                         'video_tags':video_tags,
-                                        'album_view':album_view})
+                                        'album_view':album_view,
+                                        'next_video':next_video,
+                                        'no_next':no_next,
+                                        'no_prev':no_prev,
+                                        'prev_video':prev_video})
 
 @login_required(login_url='/')
 def tag_view(request, tag_name):
@@ -98,13 +147,32 @@ def video_tag_view(request, tag_name, video_id):
     this_video = video.objects.get(id=video_id)
     the_tag = tag.objects.get(name=tag_name)
     video_tags = [t for t in this_video.tags.all()]
+    videos_w_tag = video.objects.filter(tags__name=tag_name)
+
+    if not is_most_recent(this_video):
+        next_video = get_next_video(this_video, videos_w_tag)
+        no_next = False
+    else:
+        next_video = this_video
+        no_next = True
+
+    if not is_oldest(this_video):
+        prev_video = get_prev_video(this_video, videos_w_tag)
+        no_prev = False
+    else:
+        prev_video = this_video
+        no_prev = True
 
     tag_view = True
 
     return render(request, 'video.html', {'video':this_video,
                                         'the_tag':the_tag,
                                         'video_tags':video_tags,
-                                        'tag_view':tag_view})
+                                        'tag_view':tag_view,
+                                        'next_video':next_video,
+                                        'no_next':no_next,
+                                        'no_prev':no_prev,
+                                        'prev_video':prev_video})
 
 @login_required(login_url='/')
 def recent_view(request, video_id):
@@ -112,5 +180,26 @@ def recent_view(request, video_id):
     all_videos = video.objects.all()
     video_tags = [t for t in this_video.tags.all()]
 
+    if not is_most_recent(this_video):
+        next_video = get_next_video(this_video, all_videos)
+        no_next = False
+    else:
+        next_video = this_video
+        no_next = True
+
+    if not is_oldest(this_video):
+        prev_video = get_prev_video(this_video, all_videos)
+        no_prev = False
+    else:
+        prev_video = this_video
+        no_prev = True
+
+    recent_view = True
+
     return render(request, 'video.html', {'video':this_video,
-                                        'video_tags':video_tags})
+                                        'video_tags':video_tags,
+                                        'next_video':next_video,
+                                        'prev_video':prev_video,
+                                        'no_next':no_next,
+                                        'no_prev':no_prev,
+                                        'recent_view':recent_view})
