@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from video.models import album, video, tag
+from video.forms import new_video_form
 
 def is_most_recent(this_video, video_list):
     if [i.id for i in video_list].index(this_video.id) == 0:
@@ -92,8 +93,17 @@ def main(request):
 
 @login_required(login_url='/')
 def upload(request):
+    if request.method == 'POST':
+        upload_form = new_video_form(request.POST)
 
-    return render(request, 'upload.html')
+        if upload_form.is_valid():
+
+            return HttpResponseRedirect('/main/upload/')
+
+    else:
+        upload_form = new_video_form()
+
+    return render(request, 'upload.html', {'upload_form':upload_form})
 
 @login_required(login_url='/')
 def album_view(request, album_id):
