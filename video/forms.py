@@ -1,3 +1,4 @@
+from django import forms
 from django.forms import ModelForm
 from video.models import video
 
@@ -12,3 +13,6 @@ class new_video_form(ModelForm):
                  'tags',
                  'lat',
                  'lon']
+        widgets = {
+            'video_date': forms.DateInput(attrs={'class':'datepicker'}),
+        }

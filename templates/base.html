@@ -18,6 +18,9 @@
 
 	<!-- Video.js -->
 	<link href="http://vjs.zencdn.net/5.10.2/video-js.css" rel="stylesheet">
+
+	<!-- JQuery custom css -->
+	<link href="{% static "js/jquery-ui.min.css" %}" rel="stylesheet">
 </head>
 	<body>
 
@@ -53,5 +56,15 @@
   <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
   <script src="{% static "js/bootstrap.min.js" %}"></script>
 	<script src="http://vjs.zencdn.net/5.10.2/video.js"></script>
+	<script src="{% static "js/jquery-ui.min.js" %}""></script>
+	<script>
+  $(function() {
+    $( ".datepicker" ).datepicker({
+      changeMonth: true,
+      changeYear: true,
+      yearRange: "1980:2017",
+    });
+  });
+  </script>
 </body>
 </html>
