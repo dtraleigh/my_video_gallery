@@ -91,6 +91,11 @@ def main(request):
                                         'most_recent':most_recent})
 
 @login_required(login_url='/')
+def upload(request):
+
+    return render(request, 'upload.html')
+
+@login_required(login_url='/')
 def album_view(request, album_id):
     video_album = album.objects.get(id=album_id)
     album_videos = [v for v in video_album.videos.all()]
