@@ -94,9 +94,10 @@ def main(request):
 @login_required(login_url='/')
 def upload(request):
     if request.method == 'POST':
-        upload_form = new_video_form(request.POST)
+        upload_form = new_video_form(request.POST, request.FILES)
 
         if upload_form.is_valid():
+            upload_form.save()
 
             return HttpResponseRedirect('/main/upload/')
 
