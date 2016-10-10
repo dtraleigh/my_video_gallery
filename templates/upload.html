@@ -7,12 +7,13 @@
   <div class="row well well-lg">
     <div class="col-md-12 col-sm-12 col-xs-12">
       <h2>Upload a new video</h2>
+      <p><a href="http://www.latlong.net/" target="_blank">Latitude/Longtiude Help</a></p>
+      <p><a href="#">Create new album</a></p>
         <form action="" method="post" enctype="multipart/form-data">
           {% csrf_token %}
           {{upload_form.as_p}}
           <input type="submit" value="Submit" />
         </form>
-        <p><a href="http://www.latlong.net/" target="_blank">Latitude/Longtiude Help</a></p>
     </div>
   </div>
 

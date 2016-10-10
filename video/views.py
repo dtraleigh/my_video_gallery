@@ -7,6 +7,9 @@ from django.contrib.auth.decorators import login_required
 from video.models import album, video, tag
 from video.forms import new_video_form
 
+import logging
+logger = logging.getLogger('video_log')
+
 def is_most_recent(this_video, video_list):
     if [i.id for i in video_list].index(this_video.id) == 0:
         return True
@@ -66,7 +69,7 @@ def video_logout(request):
 def main(request):
     tag_list = tag.objects.all()
     albums = album.objects.all()
-    most_recent = video.objects.all()[0:6]
+    most_recent = video.objects.all().order_by('-date_added')[0:6]
 
     #Go through each album and find the most recent video taken.
     albums_and_most_recent_date = []
@@ -92,28 +95,19 @@ def main(request):
                                         'tag_list':tag_list,
                                         'most_recent':most_recent})
 
-def handle_uploaded_file(f):
-    with open('some/file/name.txt', 'wb+') as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)
-
 @login_required(login_url='/')
 def upload(request):
     if request.method == 'POST':
         upload_form = new_video_form(request.POST, request.FILES)
 
         if upload_form.is_valid():
-            upload_form.save()
-            # name = upload_form.cleaned_data['name']
-            # video_date = upload_form.cleaned_data['video_date']
-            # description = upload_form.cleaned_data['description']
-            # lat = upload_form.cleaned_data['lat']
-            # lon = upload_form.cleaned_data['lon']
-            #
-            # handle_uploaded_file(request.FILES['poster'])
-            # handle_uploaded_file(request.FILES['video_file'])
+            new_video = upload_form.save()
 
-
+            album_choice = upload_form.cleaned_data['album']
+            #logger.debug(album_choice)
+            for a in album_choice:
+                a.videos.add(new_video)
+                a.save()
 
             return HttpResponseRedirect('/main/upload/')
 
