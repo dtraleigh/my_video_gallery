@@ -73,10 +73,11 @@ def main(request):
 
     for an_album in albums:
         album_videos = [v for v in an_album.videos.all()]
-        most_recent_video = album_videos[0]
-        for a_video in album_videos:
-            if a_video.video_date > most_recent_video.video_date:
-                most_recent_video = a_video
+        if len(album_videos) > 0:
+            most_recent_video = album_videos[0]
+            for a_video in album_videos:
+                if a_video.video_date > most_recent_video.video_date:
+                    most_recent_video = a_video
 
         albums_and_most_recent_date.append([an_album, str(most_recent_video.video_date)])
 
@@ -91,6 +92,11 @@ def main(request):
                                         'tag_list':tag_list,
                                         'most_recent':most_recent})
 
+def handle_uploaded_file(f):
+    with open('some/file/name.txt', 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+
 @login_required(login_url='/')
 def upload(request):
     if request.method == 'POST':
@@ -98,6 +104,16 @@ def upload(request):
 
         if upload_form.is_valid():
             upload_form.save()
+            # name = upload_form.cleaned_data['name']
+            # video_date = upload_form.cleaned_data['video_date']
+            # description = upload_form.cleaned_data['description']
+            # lat = upload_form.cleaned_data['lat']
+            # lon = upload_form.cleaned_data['lon']
+            #
+            # handle_uploaded_file(request.FILES['poster'])
+            # handle_uploaded_file(request.FILES['video_file'])
+
+
 
             return HttpResponseRedirect('/main/upload/')
 
