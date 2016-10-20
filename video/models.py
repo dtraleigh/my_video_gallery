@@ -1,11 +1,13 @@
 from django.db import models
 
+from video.validators import validate_poster_extension, validate_video_extension
+
 class video(models.Model):
     date_added = models.DateTimeField(auto_now_add=True, verbose_name='Date added')
     name = models.CharField(max_length=200)
     video_date = models.DateField(verbose_name='Date taken')
-    poster = models.FileField(upload_to='poster/%Y/%m/')
-    video_file = models.FileField(upload_to='video/%Y/%m/')
+    poster = models.FileField(upload_to='poster/%Y/%m/', validators=[validate_poster_extension])
+    video_file = models.FileField(upload_to='video/%Y/%m/', validators=[validate_video_extension])
     description = models.TextField(default=None, blank=True, null=True)
     tags = models.ManyToManyField('tag', default=None, blank=True)
     lat = models.DecimalField(max_digits=9, decimal_places=6, default=0)
