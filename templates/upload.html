@@ -6,13 +6,96 @@
 
   <div class="row well well-lg">
     <div class="col-md-12 col-sm-12 col-xs-12">
-      <h2>Upload a new video</h2>
-      <p><a href="http://www.latlong.net/" target="_blank">Latitude/Longtiude Help</a></p>
-      <p><a href="#">Create new album</a></p>
-        <form action="" method="post" enctype="multipart/form-data">
+      <div class="col-sm-12">
+        {% if messages %}
+        <div class="alert alert-success" role="alert">
+              {% for message in messages %}
+              <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+              {% endfor %}
+        </div>
+        {% endif %}
+        <h2>Upload a New Video</h2>
+        <p><a href="http://www.latlong.net/" target="_blank">Latitude/Longtiude Help</a></p>
+        <p><a href="#">Create new album</a></p>
+      </div>
+        <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
           {% csrf_token %}
-          {{upload_form.as_p}}
-          <input type="submit" value="Submit" />
+          {{ upload_form.non_field_errors }}
+          <div class="form-group">
+              {{ upload_form.name.errors }}
+              <label class="col-sm-2 control-label" for="{{ upload_form.name.id_for_label }}">Name</label>
+              <div class="col-sm-6">
+                {{ upload_form.name|add_class:"form-control" }}
+              </div>
+          </div>
+          <div class="form-group">
+              {{ upload_form.video_date.errors }}
+              <label class="col-sm-2 control-label" for="{{ upload_form.video_date.id_for_label }}">Date Taken</label>
+              <div class="col-sm-6">
+                {{ upload_form.video_date }}
+              </div>
+          </div>
+          <div class="form-group">
+              {{ upload_form.poster.errors }}
+              <label class="col-sm-2 control-label" for="{{ upload_form.poster.id_for_label }}">Poster</label>
+              <div class="col-sm-6">
+                {{ upload_form.poster }}
+              </div>
+          </div>
+          <div class="form-group">
+              {{ upload_form.video_file.errors }}
+              <label class="col-sm-2 control-label" for="{{ upload_form.video_file.id_for_label }}">Video File</label>
+              <div class="col-sm-6">
+                {{ upload_form.video_file }}
+              </div>
+          </div>
+          <div class="form-group">
+              {{ upload_form.description.errors }}
+              <label class="col-sm-2 control-label" for="{{ upload_form.description.id_for_label }}">Description</label>
+              <div class="col-sm-6">
+                {{ upload_form.description|add_class:"form-control" }}
+              </div>
+          </div>
+          <div class="form-group">
+              {{ upload_form.lat.errors }}
+              <label class="col-sm-2 control-label" for="{{ upload_form.lat.id_for_label }}">Latitude</label>
+              <div class="col-sm-6">
+                {{ upload_form.lat }}
+              </div>
+          </div>
+          <div class="form-group">
+              {{ upload_form.lon.errors }}
+              <label class="col-sm-2 control-label" for="{{ upload_form.lon.id_for_label }}">Longitude</label>
+              <div class="col-sm-6">
+                {{ upload_form.lon }}
+              </div>
+          </div>
+          <div class="form-group">
+              {{ upload_form.tags.errors }}
+              <h5><strong>Tags</strong></h5>
+              {% for box in upload_form.tags %}
+                <div class="checkbox col-sm-2">
+                  <label for="{{ box.id_for_label }}">
+                    {{ box.tag }}
+                    {{ box.choice_label }}
+                  </label>
+                </div>
+              {% endfor %}
+          </div>
+          <div class="form-group">
+              {{ upload_form.album.errors }}
+              <h5><strong>Albums</strong></h5>
+              {% for a in upload_form.album %}
+                <div class="checkbox col-sm-2">
+                  <label for="{{ a.id_for_label }}">
+                    {{ a.tag }}
+                    {{ a.choice_label }}
+                  </label>
+                </div>
+              {% endfor %}
+          </div>
+          <input class="btn btn-primary btn-lg" type="submit" name= "save_video" value="Save and Add Another" />
+          <input class="btn btn-primary btn-lg" type="submit" name= "save_video_and_main" value="Save and Back to Main" />
         </form>
     </div>
   </div>
