@@ -110,7 +110,7 @@ def upload(request):
                 a.save()
 
             messages.info(request, 'Successfully uploaded ' + new_video.name + '.')
-            
+
             if 'save_video' in request.POST:
                 return HttpResponseRedirect('/main/upload/')
             if 'save_video_and_main' in request.POST:
