@@ -24,14 +24,14 @@ def is_oldest(this_video, video_list):
 
 def get_next_video(curr_video, video_list):
     #Find the position that curr_video is in
-    #next_video is the one in the before after it
+    #next_video is the one in the after it
     next_video = video_list[[i.id for i in video_list].index(curr_video.id) - 1]
 
     return next_video
 
 def get_prev_video(curr_video, video_list):
     #Find the position that curr_video is in
-    #next_video is the one in the before after it
+    #next_video is the one in the before it
     prev_video = video_list[[i.id for i in video_list].index(curr_video.id) + 1]
 
     return prev_video
