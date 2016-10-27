@@ -71,25 +71,24 @@ def main(request):
     albums = album.objects.all()
     most_recent = video.objects.all().order_by('-date_added')[0:6]
 
-    #Go through each album and find the most recent video taken.
-    albums_and_most_recent_date = []
+    #We need the albums to be sorted by the videos within most recently added date_added
+    albums_most_recent_list = []
 
     for an_album in albums:
-        album_videos = [v for v in an_album.videos.all()]
-        if len(album_videos) > 0:
-            most_recent_video = album_videos[0]
-            for a_video in album_videos:
-                if a_video.video_date > most_recent_video.video_date:
-                    most_recent_video = a_video
+        #If not empty album
+        if len(an_album.videos.all()) > 0:
+            albums_most_recent = an_album.videos.latest('date_added')
 
-        albums_and_most_recent_date.append([an_album, str(most_recent_video.video_date)])
+            albums_most_recent_list.append([str(albums_most_recent.date_added), an_album])
 
-    albums_sorted_w_date = sorted(albums_and_most_recent_date, key=lambda d: d[1], reverse=True)
+    #Sort by date_added in descending order
+    albums_sorted_w_date = sorted(albums_most_recent_list, key=lambda x: x[0], reverse=True)
 
+    #Get a list of just the albums now that they are sorted by date_added
     sorted_albums = []
 
-    for an_album in albums_sorted_w_date:
-        sorted_albums.append(an_album[0])
+    for a in albums_sorted_w_date:
+        sorted_albums.append(a[1])
 
     return render(request, 'index.html', {'albums':sorted_albums,
                                         'tag_list':tag_list,
