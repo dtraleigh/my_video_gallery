@@ -13,6 +13,7 @@ class video(models.Model):
     lat = models.DecimalField(max_digits=9, decimal_places=6, default=0)
     lon = models.DecimalField(max_digits=9, decimal_places=6, default=0)
 
+    #Videos are ordered in descending order by the date they were taken. (newest to oldest)
     class Meta:
         ordering = ['-video_date']
 
