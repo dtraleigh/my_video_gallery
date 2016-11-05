@@ -41,6 +41,10 @@ def video_login(request):
     #This is the login page. The site is supposed to be password protected.
     #\\\
     message = 'Please log in'
+    next = ""
+
+    if request.GET:
+        next = request.GET['next']
 
     if request.POST:
         username = request.POST.get('username')
@@ -52,20 +56,24 @@ def video_login(request):
                 login(request, user)
                 message = 'Login successful.'
 
-                return HttpResponseRedirect('/main/')
+                if next == '':
+                    return HttpResponseRedirect('/main/')
+                else:
+                    return HttpResponseRedirect(next)
             else:
                 message = 'Account is disabled.'
         else:
             message = 'Invalid login.'
 
-    return render(request, 'login.html', {'message':message})
+    return render(request, 'login.html', {'message':message,
+                                            'next':next})
 
 def video_logout(request):
     logout(request)
 
     return HttpResponseRedirect('/')
 
-@login_required(login_url='/')
+@login_required(redirect_field_name='next')
 def main(request):
     tag_list = tag.objects.all()
     albums = album.objects.all()
@@ -94,7 +102,7 @@ def main(request):
                                         'tag_list':tag_list,
                                         'most_recent':most_recent})
 
-@login_required(login_url='/')
+@login_required(redirect_field_name='next')
 def upload(request):
     if request.method == 'POST':
         upload_form = new_video_form(request.POST, request.FILES)
@@ -120,14 +128,14 @@ def upload(request):
 
     return render(request, 'upload.html', {'upload_form':upload_form})
 
-@login_required(login_url='/')
+@login_required(redirect_field_name='next')
 def album_view(request, album_id):
     video_album = album.objects.get(id=album_id)
     album_videos = [v for v in video_album.videos.all()]
 
     return render(request, 'album.html', {'album':video_album, 'album_videos':album_videos})
 
-@login_required(login_url='/')
+@login_required(redirect_field_name='next')
 def video_view(request, album_id, video_id):
     this_video = video.objects.get(id=video_id)
     video_album = album.objects.get(id=album_id)
@@ -160,14 +168,14 @@ def video_view(request, album_id, video_id):
                                         'no_prev':no_prev,
                                         'prev_video':prev_video})
 
-@login_required(login_url='/')
+@login_required(redirect_field_name='next')
 def tag_view(request, tag_name):
     videos_w_tag = video.objects.filter(tags__name=tag_name)
     the_tag = tag.objects.get(name=tag_name)
 
     return render(request, 'tag.html', {'videos_w_tag':videos_w_tag, 'the_tag':the_tag})
 
-@login_required(login_url='/')
+@login_required(redirect_field_name='next')
 def video_tag_view(request, tag_name, video_id):
     this_video = video.objects.get(id=video_id)
     the_tag = tag.objects.get(name=tag_name)
@@ -199,7 +207,7 @@ def video_tag_view(request, tag_name, video_id):
                                         'no_prev':no_prev,
                                         'prev_video':prev_video})
 
-@login_required(login_url='/')
+@login_required(redirect_field_name='next')
 def recent_view(request, video_id):
     this_video = video.objects.get(id=video_id)
     all_videos = video.objects.all()

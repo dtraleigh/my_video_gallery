@@ -5,7 +5,11 @@
 {% block content %}
 
 <div class="login-wrapper">
-  <form class="form-signin" method="post">
+  {%if next%}
+  <form action="/?next={{next}}" class="form-signin" method="post" >
+  {%else%}
+  <form action="/" class="form-signin" method="post">
+  {%endif%}
     {% csrf_token %}
     <h2 class="form-signin-heading">{{message}}</h2>
     <input type="text" class="form-control" name="username" placeholder="Username" required="" autofocus="" />
