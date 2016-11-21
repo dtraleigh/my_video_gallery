@@ -58,6 +58,10 @@ body {
 .btn-margin{
   margin:5px;
 }
+#login-as{
+  color: white;
+  margin: 15px;
+}
 @media (max-width: 768px) {
   .album-poster-recent{
     width: 100%;
