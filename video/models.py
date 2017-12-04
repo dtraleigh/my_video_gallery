@@ -6,7 +6,7 @@ from video.validators import validate_poster_extension, validate_video_extension
 class video(models.Model):
     date_added = models.DateTimeField(auto_now_add=True, verbose_name='Date added')
     name = models.CharField(max_length=200)
-    video_date = models.DateField(verbose_name='Date taken')
+    date_shot = models.DateField(verbose_name='Date taken')
     poster = models.FileField(upload_to='poster/%Y/%m/', validators=[validate_poster_extension])
     video_file = models.FileField(upload_to='video/%Y/%m/', validators=[validate_video_extension])
     description = models.TextField(default=None, blank=True, null=True)
@@ -16,16 +16,16 @@ class video(models.Model):
 
     # Videos are ordered in descending order by the date they were taken. (newest to oldest)
     class Meta:
-        ordering = ['-video_date']
+        ordering = ['-date_shot']
 
     def __str__(self):
-        return '%s, taken on %s' % (self.name, self.video_date)
+        return '%s, taken on %s' % (self.name, self.date_shot)
 
 
 class vr_shot(models.Model):
     date_added = models.DateTimeField(auto_now_add=True, verbose_name='Date added')
     name = models.CharField(max_length=200)
-    date = models.DateField(verbose_name='Date shot')
+    date_shot = models.DateField(verbose_name='Date shot')
     vr_file = models.FileField(upload_to='vr/%Y/%m/')
     description = models.TextField(default=None, blank=True, null=True)
     tags = models.ManyToManyField('tag', default=None, blank=True)
@@ -34,10 +34,10 @@ class vr_shot(models.Model):
 
     # VR shots are ordered in descending order by the date they were taken. (newest to oldest)
     class Meta:
-        ordering = ['-date']
+        ordering = ['-date_shot']
 
     def __str__(self):
-        return '%s, taken on %s' % (self.name, self.date)
+        return '%s, taken on %s' % (self.name, self.date_shot)
 
 
 class album(models.Model):

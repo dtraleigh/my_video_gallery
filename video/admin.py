@@ -2,10 +2,10 @@ from django.contrib import admin
 from video.models import video, album, tag, vr_shot
 
 class video_admin(admin.ModelAdmin):
-    list_display = ('name', 'date_added', 'video_date', 'poster', 'video_file')
+    list_display = ('name', 'date_added', 'date_shot', 'poster', 'video_file')
 
 class vr_shot_admin(admin.ModelAdmin):
-    list_display = ('name', 'date_added', 'date', 'vr_file')
+    list_display = ('name', 'date_added', 'date_shot', 'vr_file')
 
 class album_admin(admin.ModelAdmin):
     list_display = ('name', 'date_added', 'poster', 'description')

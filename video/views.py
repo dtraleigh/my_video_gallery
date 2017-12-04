@@ -148,10 +148,11 @@ def upload(request):
 
 @login_required(redirect_field_name='next')
 def album_view(request, album_id):
-    video_album = album.objects.get(id=album_id)
-    album_videos = [v for v in video_album.videos.all()]
+    video_and_vr_album = album.objects.get(id=album_id)
+    album_videos = [v for v in video_and_vr_album.videos.all()]
+    album_vrs = [vr for vr in video_and_vr_album.vr_shots.all()]
 
-    return render(request, 'album.html', {'album':video_album, 'album_videos':album_videos})
+    return render(request, 'album.html', {'album':video_and_vr_album, 'album_videos':album_videos})
 
 @login_required(redirect_field_name='next')
 def video_view(request, album_id, video_id):

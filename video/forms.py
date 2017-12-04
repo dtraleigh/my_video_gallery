@@ -9,7 +9,7 @@ class new_video_form(ModelForm):
     class Meta:
         model = video
         fields = ['name',
-                 'video_date',
+                 'date_shot',
                  'poster',
                  'video_file',
                  'description',
@@ -28,7 +28,7 @@ class new_vr_form(ModelForm):
     class Meta:
         model = vr_shot
         fields = ['name',
-                  'date',
+                  'date_shot',
                   'vr_file',
                   'description',
                   'tags',
