@@ -22,7 +22,7 @@ class video(models.Model):
         return '%s, taken on %s' % (self.name, self.video_date)
 
 
-class vr_video(models.Model):
+class vr_shot(models.Model):
     date_added = models.DateTimeField(auto_now_add=True, verbose_name='Date added')
     name = models.CharField(max_length=200)
     date = models.DateField(verbose_name='Date shot')
