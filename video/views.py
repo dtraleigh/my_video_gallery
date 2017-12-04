@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from video.models import album, video, tag
 from video.forms import new_video_form, new_vr_form
 
+from itertools import chain
+from operator import attrgetter
 import logging
 logger = logging.getLogger('video_log')
 
@@ -149,10 +151,15 @@ def upload(request):
 @login_required(redirect_field_name='next')
 def album_view(request, album_id):
     video_and_vr_album = album.objects.get(id=album_id)
+
     album_videos = [v for v in video_and_vr_album.videos.all()]
     album_vrs = [vr for vr in video_and_vr_album.vr_shots.all()]
 
-    return render(request, 'album.html', {'album':video_and_vr_album, 'album_videos':album_videos})
+    content = reversed(sorted(
+            chain(album_videos, album_vrs),
+            key=attrgetter('date_shot')))
+
+    return render(request, 'album.html', {'album':video_and_vr_album, 'album_videos':content})
 
 @login_required(redirect_field_name='next')
 def video_view(request, album_id, video_id):
