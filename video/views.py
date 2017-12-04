@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from video.models import album, video, tag
-from video.forms import new_video_form
+from video.forms import new_video_form, new_vr_form
 
 import logging
 logger = logging.getLogger('video_log')
@@ -106,6 +106,7 @@ def main(request):
 def upload(request):
     if request.method == 'POST':
         upload_form = new_video_form(request.POST, request.FILES)
+        upload_vr_form = new_vr_form(request.POST, request.FILES)
 
         if upload_form.is_valid():
             new_video = upload_form.save()
@@ -123,10 +124,27 @@ def upload(request):
             if 'save_video_and_main' in request.POST:
                 return HttpResponseRedirect('/main/')
 
+        if upload_vr_form.is_valid():
+            new_vr_shot = upload_vr_form.save()
+
+            album_choice = upload_vr_form.cleaned_data['album']
+            for a in album_choice:
+                a.vr_shots.add(new_vr_shot)
+                a.save()
+
+            messages.info(request, 'Successfully uploaded ' + new_vr_shot.name + '.')
+
+            if 'save_vr' in request.POST:
+                return HttpResponseRedirect('/main/upload/')
+            if 'save_vr_and_main' in request.POST:
+                return HttpResponseRedirect('/main/')
+
     else:
         upload_form = new_video_form()
+        upload_vr_form = new_vr_form()
 
-    return render(request, 'upload.html', {'upload_form':upload_form})
+    return render(request, 'upload.html', {'upload_form':upload_form,
+                                           'upload_vr_form':upload_vr_form})
 
 @login_required(redirect_field_name='next')
 def album_view(request, album_id):
