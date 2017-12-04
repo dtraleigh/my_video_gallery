@@ -26,7 +26,7 @@ class vr_shot(models.Model):
     date_added = models.DateTimeField(auto_now_add=True, verbose_name='Date added')
     name = models.CharField(max_length=200)
     date = models.DateField(verbose_name='Date shot')
-    video_file = models.FileField(upload_to='vr/%Y/%m/')
+    vr_file = models.FileField(upload_to='vr/%Y/%m/')
     description = models.TextField(default=None, blank=True, null=True)
     tags = models.ManyToManyField('tag', default=None, blank=True)
     lat = models.DecimalField(max_digits=9, decimal_places=6, default=0)
