@@ -27,6 +27,7 @@ class vr_shot(models.Model):
     name = models.CharField(max_length=200)
     date_shot = models.DateField(verbose_name='Date shot')
     vr_file = models.FileField(upload_to='vr/%Y/%m/')
+    poster = models.FileField(upload_to='poster/%Y/%m/')
     description = models.TextField(default=None, blank=True, null=True)
     tags = models.ManyToManyField('tag', default=None, blank=True)
     lat = models.DecimalField(max_digits=9, decimal_places=6, default=0)

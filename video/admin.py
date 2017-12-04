@@ -5,7 +5,7 @@ class video_admin(admin.ModelAdmin):
     list_display = ('name', 'date_added', 'date_shot', 'poster', 'video_file')
 
 class vr_shot_admin(admin.ModelAdmin):
-    list_display = ('name', 'date_added', 'date_shot', 'vr_file')
+    list_display = ('name', 'date_added', 'date_shot', 'poster', 'vr_file')
 
 class album_admin(admin.ModelAdmin):
     list_display = ('name', 'date_added', 'poster', 'description')

@@ -9,15 +9,15 @@ class new_video_form(ModelForm):
     class Meta:
         model = video
         fields = ['name',
-                 'date_shot',
-                 'poster',
-                 'video_file',
-                 'description',
-                 'tags',
-                 'lat',
-                 'lon']
+                  'date_shot',
+                  'poster',
+                  'video_file',
+                  'description',
+                  'tags',
+                  'lat',
+                  'lon']
         widgets = {
-            'video_date': forms.DateInput(attrs={'class':'datepicker'}),
+            'date_shot': forms.DateInput(attrs={'class':'datepicker'}),
             'tags':forms.CheckboxSelectMultiple(),
         }
 
@@ -30,12 +30,13 @@ class new_vr_form(ModelForm):
         fields = ['name',
                   'date_shot',
                   'vr_file',
+                  'poster',
                   'description',
                   'tags',
                   'lat',
                   'lon'
                   ]
         widgets = {
-            'date': forms.DateInput(attrs={'class': 'datepicker'}),
+            'date_shot': forms.DateInput(attrs={'class': 'datepicker'}),
             'tags': forms.CheckboxSelectMultiple(),
         }
