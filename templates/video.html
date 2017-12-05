@@ -35,7 +35,7 @@
         {% autoescape off %}
         <p>{{video.description}}</p>
         {%endautoescape%}
-        <p>Date Taken: <strong>{{video.video_date}}</strong></p>
+        <p>Date Taken: <strong>{{video.date_shot}}</strong></p>
         <strong>Tags</strong>
         <p>
         {%for tag in video_tags%}
