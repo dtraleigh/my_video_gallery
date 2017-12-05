@@ -162,37 +162,42 @@ def album_view(request, album_id):
     return render(request, 'album.html', {'album':video_and_vr_album, 'album_videos':content})
 
 @login_required(redirect_field_name='next')
-def video_view(request, album_id, video_id):
-    this_video = video.objects.get(id=video_id)
-    video_album = album.objects.get(id=album_id)
-    album_videos = [v for v in video_album.videos.all()]
-    video_tags = [t for t in this_video.tags.all()]
+def shot_view(request, album_id, shot_id):
+    # The shot the user wants to see
+    this_shot = video.objects.get(id=shot_id)
 
-    if not is_most_recent(this_video, album_videos):
-        next_video = get_next_video(this_video, album_videos)
+    # The album the user is within
+    the_album = album.objects.get(id=album_id)
+
+    # All the shots within this album
+    album_shots = [v for v in the_album.videos.all()]
+    shot_tags = [t for t in this_shot.tags.all()]
+
+    if not is_most_recent(this_shot, album_shots):
+        next_video = get_next_video(this_shot, album_shots)
         no_next = False
     else:
-        next_video = this_video
+        next_video = this_shot
         no_next = True
 
-    if not is_oldest(this_video, album_videos):
-        prev_video = get_prev_video(this_video, album_videos)
+    if not is_oldest(this_shot, album_shots):
+        prev_video = get_prev_video(this_shot, album_shots)
         no_prev = False
     else:
-        prev_video = this_video
+        prev_video = this_shot
         no_prev = True
 
     album_view = True
 
-    return render(request, 'video.html', {'video':this_video,
-                                        'album':video_album,
-                                        'album_videos':album_videos,
-                                        'video_tags':video_tags,
-                                        'album_view':album_view,
-                                        'next_video':next_video,
-                                        'no_next':no_next,
-                                        'no_prev':no_prev,
-                                        'prev_video':prev_video})
+    return render(request, 'video.html', {'video':this_shot,
+                                          'album':the_album,
+                                          'album_videos':album_shots,
+                                          'video_tags':shot_tags,
+                                          'album_view':album_view,
+                                          'next_video':next_video,
+                                          'no_next':no_next,
+                                          'no_prev':no_prev,
+                                          'prev_video':prev_video})
 
 @login_required(redirect_field_name='next')
 def tag_view(request, tag_name):
