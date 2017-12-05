@@ -21,6 +21,9 @@ class video(models.Model):
     def __str__(self):
         return '%s, taken on %s' % (self.name, self.date_shot)
 
+    def get_cname(self):
+        return self.__class__.__name__
+
 
 class vr_shot(models.Model):
     date_added = models.DateTimeField(auto_now_add=True, verbose_name='Date added')
@@ -39,6 +42,9 @@ class vr_shot(models.Model):
 
     def __str__(self):
         return '%s, taken on %s' % (self.name, self.date_shot)
+
+    def get_cname(self):
+        return self.__class__.__name__
 
 
 class album(models.Model):

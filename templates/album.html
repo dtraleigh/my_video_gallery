@@ -6,16 +6,22 @@
 	<h1>{{album.name}}</h1>
   <p class="text-right"><span class="label label-info">Sorted by Most Recent Date Taken.</span></p>
   <div class="row">
-    {%for video in album_videos%}
+    {%for shot in album_videos%}
     <div class="col-sm-6 col-xs-12">
       <div class="well well-lg">
-        <a href="/album/{{album.id}}/video/{{video.id}}">
-          <div class="album-poster" style="background-image:url({{ MEDIA_URL }}/{{video.poster}});"></div>
-        </a>
-        <h4>{{video.name}}</h4>
+          {%if shot.get_cname == "video"%}
+            <a href="/album/{{album.id}}/video/{{shot.id}}">
+              <div class="album-poster" style="background-image:url({{ MEDIA_URL }}/{{shot.poster}});"></div>
+            </a>
+          {%elif shot.get_cname == "vr_shot"%}
+            <a href="/album/{{album.id}}/vr/{{shot.id}}">
+              <div class="album-poster" style="background-image:url({{ MEDIA_URL }}/{{shot.poster}});"></div>
+            </a>
+          {%endif%}
+        <h4>{{shot.name}}</h4>
         {% autoescape off %}
-        <p>{{video.description}}</p>
-        <p><strong>Date Taken:</strong> {{video.date_shot}}</p>
+        <p>{{shot.description}}</p>
+        <p><strong>Date Taken:</strong> {{shot.date_shot}}</p>
         {%endautoescape%}
       </div>
     </div>
