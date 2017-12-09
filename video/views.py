@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
-from video.models import album, video, tag
+from video.models import album, video, tag, vr_shot
 from video.forms import new_video_form, new_vr_form
 
 from itertools import chain
@@ -12,31 +12,36 @@ from operator import attrgetter
 import logging
 logger = logging.getLogger('video_log')
 
-def is_most_recent(this_video, video_list):
-    if [i.id for i in video_list].index(this_video.id) == 0:
+def is_most_recent(this_shot, shot_list):
+    if [i.id for i in shot_list].index(this_shot.id) == 0:
         return True
     else:
         return False
 
-def is_oldest(this_video, video_list):
-    if [i.id for i in video_list].index(this_video.id) == len(video_list) - 1:
+def is_oldest(this_shot, shot_list):
+    if [i.id for i in shot_list].index(this_shot.id) == len(shot_list) - 1:
         return True
     else:
         return False
 
-def get_next_video(curr_video, video_list):
-    #Find the position that curr_video is in
-    #next_video is the one in the after it
-    next_video = video_list[[i.id for i in video_list].index(curr_video.id) - 1]
+def get_next_shot(curr_shot, shot_list):
+    #Find the position that curr_shot is in
+    #next_shot is the one in the after it
+    next_shot = shot_list[[i.id for i in shot_list].index(curr_shot.id) - 1]
 
-    return next_video
+    return next_shot
 
-def get_prev_video(curr_video, video_list):
+def get_prev_shot(curr_shot, shot_list):
     #Find the position that curr_video is in
     #next_video is the one in the before it
-    prev_video = video_list[[i.id for i in video_list].index(curr_video.id) + 1]
+    prev_shot = shot_list[[i.id for i in shot_list].index(curr_shot.id) + 1]
 
-    return prev_video
+    return prev_shot
+
+def combine_and_sort(vr_list, video_list):
+    return reversed(sorted(
+        chain(vr_list, video_list),
+        key=attrgetter('date_shot')))
 
 def video_login(request):
     #///
@@ -155,33 +160,38 @@ def album_view(request, album_id):
     album_videos = [v for v in video_and_vr_album.videos.all()]
     album_vrs = [vr for vr in video_and_vr_album.vr_shots.all()]
 
-    content = reversed(sorted(
-            chain(album_videos, album_vrs),
-            key=attrgetter('date_shot')))
+    content = combine_and_sort(album_vrs, album_videos)
 
     return render(request, 'album.html', {'album':video_and_vr_album, 'album_videos':content})
 
 @login_required(redirect_field_name='next')
-def shot_view(request, album_id, shot_id):
+def shot_view(request, album_id, shot_type, shot_id):
     # The shot the user wants to see
-    this_shot = video.objects.get(id=shot_id)
+    if shot_type == "video":
+        this_shot = video.objects.get(id=shot_id)
+    elif shot_type == "vr":
+        this_shot = vr_shot.objects.get(id=shot_id)
 
     # The album the user is within
-    the_album = album.objects.get(id=album_id)
+        video_and_vr_album = album.objects.get(id=album_id)
+
+    album_videos = [v for v in video_and_vr_album.videos.all()]
+    album_vrs = [vr for vr in video_and_vr_album.vr_shots.all()]
 
     # All the shots within this album
-    album_shots = [v for v in the_album.videos.all()]
+    album_shots = combine_and_sort(album_vrs, album_videos)
+
     shot_tags = [t for t in this_shot.tags.all()]
 
     if not is_most_recent(this_shot, album_shots):
-        next_video = get_next_video(this_shot, album_shots)
+        next_video = get_next_shot(this_shot, album_shots)
         no_next = False
     else:
         next_video = this_shot
         no_next = True
 
     if not is_oldest(this_shot, album_shots):
-        prev_video = get_prev_video(this_shot, album_shots)
+        prev_video = get_prev_shot(this_shot, album_shots)
         no_prev = False
     else:
         prev_video = this_shot
@@ -190,7 +200,7 @@ def shot_view(request, album_id, shot_id):
     album_view = True
 
     return render(request, 'video.html', {'video':this_shot,
-                                          'album':the_album,
+                                          'album':video_and_vr_album,
                                           'album_videos':album_shots,
                                           'video_tags':shot_tags,
                                           'album_view':album_view,
@@ -214,14 +224,14 @@ def video_tag_view(request, tag_name, video_id):
     videos_w_tag = video.objects.filter(tags__name=tag_name)
 
     if not is_most_recent(this_video, videos_w_tag):
-        next_video = get_next_video(this_video, videos_w_tag)
+        next_video = get_next_shot(this_video, videos_w_tag)
         no_next = False
     else:
         next_video = this_video
         no_next = True
 
     if not is_oldest(this_video, videos_w_tag):
-        prev_video = get_prev_video(this_video, videos_w_tag)
+        prev_video = get_prev_shot(this_video, videos_w_tag)
         no_prev = False
     else:
         prev_video = this_video
@@ -245,14 +255,14 @@ def recent_view(request, video_id):
     video_tags = [t for t in this_video.tags.all()]
 
     if not is_most_recent(this_video, all_videos):
-        next_video = get_next_video(this_video, all_videos)
+        next_video = get_next_shot(this_video, all_videos)
         no_next = False
     else:
         next_video = this_video
         no_next = True
 
     if not is_oldest(this_video, all_videos):
-        prev_video = get_prev_video(this_video, all_videos)
+        prev_video = get_prev_shot(this_video, all_videos)
         no_prev = False
     else:
         prev_video = this_video
