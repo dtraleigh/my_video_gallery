@@ -39,9 +39,11 @@ def get_prev_shot(curr_shot, shot_list):
     return prev_shot
 
 def combine_and_sort(vr_list, video_list):
-    return reversed(sorted(
+    shots_sorted = sorted(
         chain(vr_list, video_list),
-        key=attrgetter('date_shot')))
+        key=attrgetter('date_shot'))
+
+    return shots_sorted[::-1]
 
 def video_login(request):
     #///
@@ -85,8 +87,8 @@ def main(request):
     tag_list = tag.objects.all()
     albums = album.objects.all()
 
-    all_videos = video.objects.all()
-    all_vr = vr_shot.objects.all()
+    all_videos = [v for v in video.objects.all()]
+    all_vr = [vr for vr in vr_shot.objects.all()]
 
     all_shots = combine_and_sort(all_vr, all_videos)
 

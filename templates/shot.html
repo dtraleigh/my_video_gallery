@@ -54,11 +54,23 @@
               </div>
               <div class="panel-body">
                 {%if album_view%}
-                    <a href="/album/{{album.id}}/video/{{prev_video.id}}" class="thumbnail">
+                  {%if pref_video.get_cname == "video"%}
+                    <a href="/album/{{album.id}}/video/{{pref_video.id}}" class="thumbnail">
+                  {%elif pref_video.get_cname == "vr_shot"%}
+                    <a href="/album/{{album.id}}/vr/{{pref_video.id}}" class="thumbnail">
+                  {%endif%}
                 {%elif tag_view%}
-                    <a href="/tag/{{the_tag.name}}/video/{{prev_video.id}}" class="thumbnail">
+                  {%if pref_video.get_cname == "video"%}
+                    <a href="/tag/{{the_tag.name}}/video/{{pref_video.id}}" class="thumbnail">
+                  {%elif pref_video.get_cname == "vr_shot"%}
+                    <a href="/tag/{{the_tag.name}}/vr/{{pref_video.id}}" class="thumbnail">
+                  {%endif%}
                 {%elif recent_view%}
-                    <a href="/recent/{{prev_video.id}}" class="thumbnail">
+                  {%if pref_video.get_cname == "video"%}
+                    <a href="/recent/video/{{pref_video.id}}" class="thumbnail">
+                  {%elif pref_video.get_cname == "vr_shot"%}
+                    <a href="/recent/vr/{{pref_video.id}}" class="thumbnail">
+                  {%endif%}
                 {%endif%}
                   <img src="{{ MEDIA_URL }}/{{prev_video.poster}}" alt="...">
                 </a>
@@ -74,11 +86,23 @@
               </div>
               <div class="panel-body">
                 {%if album_view%}
+                  {%if next_video.get_cname == "video"%}
                     <a href="/album/{{album.id}}/video/{{next_video.id}}" class="thumbnail">
+                  {%elif next_video.get_cname == "vr_shot"%}
+                    <a href="/album/{{album.id}}/vr/{{next_video.id}}" class="thumbnail">
+                  {%endif%}
                 {%elif tag_view%}
+                  {%if next_video.get_cname == "video"%}
                     <a href="/tag/{{the_tag.name}}/video/{{next_video.id}}" class="thumbnail">
+                  {%elif next_video.get_cname == "vr_shot"%}
+                    <a href="/tag/{{the_tag.name}}/vr/{{next_video.id}}" class="thumbnail">
+                  {%endif%}
                 {%elif recent_view%}
-                    <a href="/recent/{{next_video.id}}" class="thumbnail">
+                  {%if next_video.get_cname == "video"%}
+                    <a href="/recent/video/{{next_video.id}}" class="thumbnail">
+                  {%elif next_video.get_cname == "vr_shot"%}
+                    <a href="/recent/vr/{{next_video.id}}" class="thumbnail">
+                  {%endif%}
                 {%endif%}
                   <img src="{{ MEDIA_URL }}/{{next_video.poster}}" alt="...">
                 </a>
