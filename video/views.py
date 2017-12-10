@@ -181,7 +181,7 @@ def shot_view(request, album_id, shot_type, shot_id):
         this_shot = vr_shot.objects.get(id=shot_id)
 
     # The album the user is within
-        video_and_vr_album = album.objects.get(id=album_id)
+    video_and_vr_album = album.objects.get(id=album_id)
 
     album_videos = [v for v in video_and_vr_album.videos.all()]
     album_vrs = [vr for vr in video_and_vr_album.vr_shots.all()]
