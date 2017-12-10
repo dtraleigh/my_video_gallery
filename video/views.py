@@ -264,28 +264,38 @@ def video_tag_view(request, tag_name, shot_type, shot_id):
                                         'prev_video':prev_video})
 
 @login_required(redirect_field_name='next')
-def recent_view(request, video_id):
-    this_video = video.objects.get(id=video_id)
-    all_videos = video.objects.all()
-    video_tags = [t for t in this_video.tags.all()]
+def recent_view(request, shot_type, shot_id):
+    # The shot the user wants to see
+    if shot_type == "video":
+        this_shot = video.objects.get(id=shot_id)
+    elif shot_type == "vr":
+        this_shot = vr_shot.objects.get(id=shot_id)
 
-    if not is_most_recent(this_video, all_videos):
-        next_video = get_next_shot(this_video, all_videos)
+    all_videos = video.objects.all()
+    all_vr = vr_shot.objects.all()
+
+    # All the shots within this album
+    all_shots = combine_and_sort(all_vr, all_videos)
+
+    video_tags = [t for t in this_shot.tags.all()]
+
+    if not is_most_recent(this_shot, all_shots):
+        next_video = get_next_shot(this_shot, all_shots)
         no_next = False
     else:
-        next_video = this_video
+        next_video = this_shot
         no_next = True
 
-    if not is_oldest(this_video, all_videos):
-        prev_video = get_prev_shot(this_video, all_videos)
+    if not is_oldest(this_shot, all_shots):
+        prev_video = get_prev_shot(this_shot, all_shots)
         no_prev = False
     else:
-        prev_video = this_video
+        prev_video = this_shot
         no_prev = True
 
     recent_view = True
 
-    return render(request, 'video.html', {'video':this_video,
+    return render(request, 'video.html', {'video':this_shot,
                                         'video_tags':video_tags,
                                         'next_video':next_video,
                                         'prev_video':prev_video,

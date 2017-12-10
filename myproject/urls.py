@@ -12,5 +12,5 @@ urlpatterns = [
     url(r'^album/(?P<album_id>[0-9]+)/(?P<shot_type>[0-9]+)/(?P<shot_id>[0-9]+)$', views.shot_view),
     url(r'^tag/(?P<tag_name>[\w|\W]+)/(?P<shot_type>[0-9]+)/(?P<video_id>[0-9]+)$', views.video_tag_view),
     url(r'^tag/(?P<tag_name>[\w|\W]+)$', views.tag_view),
-    url(r'^recent/(?P<video_id>[0-9]+)$', views.recent_view),
+    url(r'^recent/(?P<shot_type>[0-9]+)/(?P<video_id>[0-9]+)$', views.recent_view),
 ]
