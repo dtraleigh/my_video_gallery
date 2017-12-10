@@ -19,10 +19,16 @@
     </div>
     <div class="col-sm-6 col-xs-12">
       <h2>Newly added</h2>
-        {%for video in most_recent%}
-          <a href="/recent/{{video.id}}">
-            <img class="album-poster-recent" src="{{ MEDIA_URL }}{{video.poster}}">
-          </a>
+        {%for shot in most_recent%}
+          {%if shot.get_cname == "video"%}
+            <a href="/recent/video/{{shot.id}}">
+              <img class="album-poster-recent" src="{{ MEDIA_URL }}{{shot.poster}}">
+            </a>
+          {%elif shot.get_cname == "vr_shot"%}
+            <a href="/recent/vr/{{shot.id}}">
+              <img class="album-poster-recent" src="{{ MEDIA_URL }}{{shot.poster}}">
+            </a>
+          {%endif%}
         {%endfor%}
     </div>
   </div>
