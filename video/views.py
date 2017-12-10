@@ -222,31 +222,41 @@ def tag_view(request, tag_name):
     return render(request, 'tag.html', {'videos_w_tag':videos_w_tag, 'the_tag':the_tag})
 
 @login_required(redirect_field_name='next')
-def video_tag_view(request, tag_name, video_id):
-    this_video = video.objects.get(id=video_id)
-    the_tag = tag.objects.get(name=tag_name)
-    video_tags = [t for t in this_video.tags.all()]
-    videos_w_tag = video.objects.filter(tags__name=tag_name)
+def video_tag_view(request, tag_name, shot_type, shot_id):
+    # The shot the user wants to see
+    if shot_type == "video":
+        this_shot = video.objects.get(id=shot_id)
+    elif shot_type == "vr":
+        this_shot = vr_shot.objects.get(id=shot_id)
 
-    if not is_most_recent(this_video, videos_w_tag):
-        next_video = get_next_shot(this_video, videos_w_tag)
+    # The tag the user clicked on
+    the_tag = tag.objects.get(name=tag_name)
+
+    # This shot's tags
+    shot_tags = [t for t in this_shot.tags.all()]
+
+    # All shots that have this tag
+    shots_w_tag = video.objects.filter(tags__name=tag_name)
+
+    if not is_most_recent(this_shot, shots_w_tag):
+        next_video = get_next_shot(this_shot, shots_w_tag)
         no_next = False
     else:
-        next_video = this_video
+        next_video = this_shot
         no_next = True
 
-    if not is_oldest(this_video, videos_w_tag):
-        prev_video = get_prev_shot(this_video, videos_w_tag)
+    if not is_oldest(this_shot, shots_w_tag):
+        prev_video = get_prev_shot(this_shot, shots_w_tag)
         no_prev = False
     else:
-        prev_video = this_video
+        prev_video = this_shot
         no_prev = True
 
     tag_view = True
 
-    return render(request, 'video.html', {'video':this_video,
+    return render(request, 'video.html', {'video':this_shot,
                                         'the_tag':the_tag,
-                                        'video_tags':video_tags,
+                                        'video_tags':shot_tags,
                                         'tag_view':tag_view,
                                         'next_video':next_video,
                                         'no_next':no_next,
