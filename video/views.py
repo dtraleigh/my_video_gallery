@@ -212,6 +212,11 @@ def shot_view(request, album_id, shot_type, shot_id):
 @login_required(redirect_field_name='next')
 def tag_view(request, tag_name):
     videos_w_tag = video.objects.filter(tags__name=tag_name)
+    vr_w_tag = vr_shot.objects.filter(tags__name=tag_name)
+
+    # All the shots with this tag
+    videos_w_tag = combine_and_sort(videos_w_tag, vr_w_tag)
+
     the_tag = tag.objects.get(name=tag_name)
 
     return render(request, 'tag.html', {'videos_w_tag':videos_w_tag, 'the_tag':the_tag})
