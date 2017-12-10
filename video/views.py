@@ -84,7 +84,13 @@ def video_logout(request):
 def main(request):
     tag_list = tag.objects.all()
     albums = album.objects.all()
-    most_recent = video.objects.all().order_by('-date_added')[0:6]
+
+    all_videos = video.objects.all()
+    all_vr = vr_shot.objects.all()
+
+    all_shots = combine_and_sort(all_vr, all_videos)
+
+    most_recent = all_shots[0:6]
 
     #We need the albums to be sorted by the videos within most recently added date_added
     albums_most_recent_list = []
@@ -199,7 +205,7 @@ def shot_view(request, album_id, shot_type, shot_id):
 
     album_view = True
 
-    return render(request, 'video.html', {'video':this_shot,
+    return render(request, 'shot.html', {'video':this_shot,
                                           'album':video_and_vr_album,
                                           'album_videos':album_shots,
                                           'video_tags':shot_tags,
@@ -254,7 +260,7 @@ def video_tag_view(request, tag_name, shot_type, shot_id):
 
     tag_view = True
 
-    return render(request, 'video.html', {'video':this_shot,
+    return render(request, 'shot.html', {'video':this_shot,
                                         'the_tag':the_tag,
                                         'video_tags':shot_tags,
                                         'tag_view':tag_view,
@@ -274,7 +280,6 @@ def recent_view(request, shot_type, shot_id):
     all_videos = video.objects.all()
     all_vr = vr_shot.objects.all()
 
-    # All the shots within this album
     all_shots = combine_and_sort(all_vr, all_videos)
 
     video_tags = [t for t in this_shot.tags.all()]
@@ -295,7 +300,7 @@ def recent_view(request, shot_type, shot_id):
 
     recent_view = True
 
-    return render(request, 'video.html', {'video':this_shot,
+    return render(request, 'shot.html', {'video':this_shot,
                                         'video_tags':video_tags,
                                         'next_video':next_video,
                                         'prev_video':prev_video,
