@@ -98,6 +98,7 @@ def main(request):
 
     all_shots = combine_and_sort(all_vr, all_videos)
 
+    # most_recent means the 6 most recently shot (not uploaded) files
     most_recent = all_shots[0:6]
 
     # We need the albums to be sorted by the videos within most recently added date_added

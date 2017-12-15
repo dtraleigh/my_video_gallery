@@ -18,7 +18,7 @@
       {%endfor%}
     </div>
     <div class="col-sm-6 col-xs-12">
-      <h2>Newly added</h2>
+      <h2>Newly added</h2><p class="text-right"><span class="label label-info">Sorted by Most Recently shot.</span></p>
         {%for shot in most_recent%}
           {%if shot.get_cname == "video"%}
             <a href="/recent/video/{{shot.id}}">
