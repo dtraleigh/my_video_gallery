@@ -56,7 +56,7 @@ class album(models.Model):
     poster = models.FileField(upload_to='poster/%Y/%m/')
 
     def __str__(self):
-        return '%s' % (self.name)
+        return '%s' % self.name
 
 
 class tag(models.Model):
@@ -64,4 +64,4 @@ class tag(models.Model):
     name = models.CharField(max_length=200, unique=True)
 
     def __str__(self):
-        return '%s' % (self.name)
+        return '%s' % self.name

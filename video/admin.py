@@ -1,17 +1,22 @@
 from django.contrib import admin
 from video.models import video, album, tag, vr_shot
 
+
 class video_admin(admin.ModelAdmin):
     list_display = ('name', 'date_added', 'date_shot', 'poster', 'video_file')
+
 
 class vr_shot_admin(admin.ModelAdmin):
     list_display = ('name', 'date_added', 'date_shot', 'poster', 'vr_file')
 
+
 class album_admin(admin.ModelAdmin):
     list_display = ('name', 'date_added', 'poster', 'description')
 
+
 class tag_admin(admin.ModelAdmin):
     list_display = ('name', 'date_added')
+
 
 admin.site.register(video, video_admin)
 admin.site.register(vr_shot, vr_shot_admin)

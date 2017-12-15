@@ -12,11 +12,13 @@ from operator import attrgetter
 import logging
 logger = logging.getLogger('video_log')
 
+
 def is_most_recent(this_shot, shot_list):
     if [i.id for i in shot_list].index(this_shot.id) == 0:
         return True
     else:
         return False
+
 
 def is_oldest(this_shot, shot_list):
     if [i.id for i in shot_list].index(this_shot.id) == len(shot_list) - 1:
@@ -24,19 +26,22 @@ def is_oldest(this_shot, shot_list):
     else:
         return False
 
+
 def get_next_shot(curr_shot, shot_list):
-    #Find the position that curr_shot is in
-    #next_shot is the one in the after it
+    # Find the position that curr_shot is in
+    # next_shot is the one in the after it
     next_shot = shot_list[[i.id for i in shot_list].index(curr_shot.id) - 1]
 
     return next_shot
 
+
 def get_prev_shot(curr_shot, shot_list):
-    #Find the position that curr_video is in
-    #next_video is the one in the before it
+    # Find the position that curr_video is in
+    # next_video is the one in the before it
     prev_shot = shot_list[[i.id for i in shot_list].index(curr_shot.id) + 1]
 
     return prev_shot
+
 
 def combine_and_sort(vr_list, video_list):
     shots_sorted = sorted(
@@ -45,10 +50,9 @@ def combine_and_sort(vr_list, video_list):
 
     return shots_sorted[::-1]
 
+
 def video_login(request):
-    #///
-    #This is the login page. The site is supposed to be password protected.
-    #\\\
+    # This is the login page. The site is supposed to be password protected.
     message = 'Please log in'
     next = ""
 
@@ -74,13 +78,15 @@ def video_login(request):
         else:
             message = 'Invalid login.'
 
-    return render(request, 'login.html', {'message':message,
-                                            'next':next})
+    return render(request, 'login.html', {'message': message,
+                                          'next': next})
+
 
 def video_logout(request):
     logout(request)
 
     return HttpResponseRedirect('/')
+
 
 @login_required(redirect_field_name='next')
 def main(request):
@@ -94,28 +100,29 @@ def main(request):
 
     most_recent = all_shots[0:6]
 
-    #We need the albums to be sorted by the videos within most recently added date_added
+    # We need the albums to be sorted by the videos within most recently added date_added
     albums_most_recent_list = []
 
     for an_album in albums:
-        #If not empty album
+        # If not empty album
         if len(an_album.videos.all()) > 0:
             albums_most_recent = an_album.videos.latest('date_added')
 
             albums_most_recent_list.append([str(albums_most_recent.date_added), an_album])
 
-    #Sort by date_added in descending order
+    # Sort by date_added in descending order
     albums_sorted_w_date = sorted(albums_most_recent_list, key=lambda x: x[0], reverse=True)
 
-    #Get a list of just the albums now that they are sorted by date_added
+    # Get a list of just the albums now that they are sorted by date_added
     sorted_albums = []
 
     for a in albums_sorted_w_date:
         sorted_albums.append(a[1])
 
-    return render(request, 'index.html', {'albums':sorted_albums,
-                                        'tag_list':tag_list,
-                                        'most_recent':most_recent})
+    return render(request, 'index.html', {'albums': sorted_albums,
+                                          'tag_list': tag_list,
+                                          'most_recent': most_recent})
+
 
 @login_required(redirect_field_name='next')
 def upload(request):
@@ -127,7 +134,7 @@ def upload(request):
             new_video = upload_form.save()
 
             album_choice = upload_form.cleaned_data['album']
-            #logger.debug(album_choice)
+            # logger.debug(album_choice)
             for a in album_choice:
                 a.videos.add(new_video)
                 a.save()
@@ -158,8 +165,9 @@ def upload(request):
         upload_form = new_video_form()
         upload_vr_form = new_vr_form()
 
-    return render(request, 'upload.html', {'upload_form':upload_form,
-                                           'upload_vr_form':upload_vr_form})
+    return render(request, 'upload.html', {'upload_form': upload_form,
+                                           'upload_vr_form': upload_vr_form})
+
 
 @login_required(redirect_field_name='next')
 def album_view(request, album_id):
@@ -170,7 +178,9 @@ def album_view(request, album_id):
 
     content = combine_and_sort(album_vrs, album_videos)
 
-    return render(request, 'album.html', {'album':video_and_vr_album, 'album_videos':content})
+    return render(request, 'album.html', {'album': video_and_vr_album,
+                                          'album_videos': content})
+
 
 @login_required(redirect_field_name='next')
 def shot_view(request, album_id, shot_type, shot_id):
@@ -207,15 +217,16 @@ def shot_view(request, album_id, shot_type, shot_id):
 
     album_view = True
 
-    return render(request, 'shot.html', {'video':this_shot,
-                                          'album':video_and_vr_album,
-                                          'album_videos':album_shots,
-                                          'video_tags':shot_tags,
-                                          'album_view':album_view,
-                                          'next_video':next_video,
-                                          'no_next':no_next,
-                                          'no_prev':no_prev,
-                                          'prev_video':prev_video})
+    return render(request, 'shot.html', {'video': this_shot,
+                                         'album': video_and_vr_album,
+                                         'album_videos': album_shots,
+                                         'video_tags': shot_tags,
+                                         'album_view': album_view,
+                                         'next_video': next_video,
+                                         'no_next': no_next,
+                                         'no_prev': no_prev,
+                                         'prev_video': prev_video})
+
 
 @login_required(redirect_field_name='next')
 def tag_view(request, tag_name):
@@ -227,7 +238,9 @@ def tag_view(request, tag_name):
 
     the_tag = tag.objects.get(name=tag_name)
 
-    return render(request, 'tag.html', {'videos_w_tag':videos_w_tag, 'the_tag':the_tag})
+    return render(request, 'tag.html', {'videos_w_tag': videos_w_tag,
+                                        'the_tag': the_tag})
+
 
 @login_required(redirect_field_name='next')
 def video_tag_view(request, tag_name, shot_type, shot_id):
@@ -262,14 +275,15 @@ def video_tag_view(request, tag_name, shot_type, shot_id):
 
     tag_view = True
 
-    return render(request, 'shot.html', {'video':this_shot,
-                                        'the_tag':the_tag,
-                                        'video_tags':shot_tags,
-                                        'tag_view':tag_view,
-                                        'next_video':next_video,
-                                        'no_next':no_next,
-                                        'no_prev':no_prev,
-                                        'prev_video':prev_video})
+    return render(request, 'shot.html', {'video': this_shot,
+                                         'the_tag': the_tag,
+                                         'video_tags': shot_tags,
+                                         'tag_view': tag_view,
+                                         'next_video': next_video,
+                                         'no_next': no_next,
+                                         'no_prev': no_prev,
+                                         'prev_video': prev_video})
+
 
 @login_required(redirect_field_name='next')
 def recent_view(request, shot_type, shot_id):
@@ -302,10 +316,10 @@ def recent_view(request, shot_type, shot_id):
 
     recent_view = True
 
-    return render(request, 'shot.html', {'video':this_shot,
-                                        'video_tags':video_tags,
-                                        'next_video':next_video,
-                                        'prev_video':prev_video,
-                                        'no_next':no_next,
-                                        'no_prev':no_prev,
-                                        'recent_view':recent_view})
+    return render(request, 'shot.html', {'video': this_shot,
+                                         'video_tags': video_tags,
+                                         'next_video': next_video,
+                                         'prev_video': prev_video,
+                                         'no_next': no_next,
+                                         'no_prev': no_prev,
+                                         'recent_view': recent_view})
