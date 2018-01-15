@@ -115,7 +115,9 @@
                         {{ upload_form.lon }}
                     </div>
                 </div>
-                <button type="button" id="home_lat_lon" class="btn btn-default">Set Home</button>
+                {%for qloc in quick_locations%}
+                    <button type="button" id="{{qloc.htmlid}}" class="btn btn-default">{{qloc.label}}</button>
+                {%endfor%}
                 <div class="form-group">
                     {%if upload_form.poster.errors%}
                     <div class="alert alert-danger" role="alert">
@@ -253,7 +255,9 @@
                         {{ upload_vr_form.lon }}
                     </div>
                 </div>
-                <button type="button" id="home_lat_lon" class="btn btn-default">Set Home</button>
+                {%for qloc in quick_locations%}
+                    <button type="button" id="{{qloc.htmlid}}_vr" class="btn btn-default">{{qloc.label}}</button>
+                {%endfor%}
                 <div class="form-group">
                     {%if upload_vr_form.poster.errors%}
                     <div class="alert alert-danger" role="alert">
@@ -286,5 +290,22 @@
 </div>
 
 <!-- End VR Upload section -->
+
+<script>
+$(document).ready(function(){
+{%for qloc in quick_locations%}
+        $("#{{qloc.htmlid}}").click(function() {
+          $("#id_lon").val({{qloc.lon}});
+          $("#id_lat").val({{qloc.lat}});
+        });
+{%endfor%}
+{%for qloc in quick_locations%}
+        $("#{{qloc.htmlid}}_vr").click(function() {
+          $("#id_lon").val({{qloc.lon}});
+          $("#id_lat").val({{qloc.lat}});
+        });
+{%endfor%}
+});
+</script>
 
 {%endblock content%}

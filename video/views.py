@@ -4,8 +4,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
-from video.models import album, video, tag, vr_shot
-from video.forms import new_video_form, new_vr_form
+from video.models import *
+from video.forms import *
 
 from itertools import chain
 from operator import attrgetter
@@ -166,8 +166,11 @@ def upload(request):
         upload_form = new_video_form()
         upload_vr_form = new_vr_form()
 
+    quick_locations = location.objects.all()
+
     return render(request, 'upload.html', {'upload_form': upload_form,
-                                           'upload_vr_form': upload_vr_form})
+                                           'upload_vr_form': upload_vr_form,
+                                           'quick_locations': quick_locations})
 
 
 @login_required(redirect_field_name='next')

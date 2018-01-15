@@ -65,3 +65,13 @@ class tag(models.Model):
 
     def __str__(self):
         return '%s' % self.name
+
+class location(models.Model):
+    name = models.CharField(max_length=200, unique=True)
+    label = models.CharField(max_length=50, unique=True)
+    htmlid = models.CharField(max_length=20, unique=False, verbose_name='HTML id')
+    lat = models.DecimalField(max_digits=9, decimal_places=6, default=0)
+    lon = models.DecimalField(max_digits=9, decimal_places=6, default=0)
+
+    def __str__(self):
+        return '%s' % self.name
