@@ -17,7 +17,8 @@ class new_video_form(ModelForm):
                   'lat',
                   'lon']
         widgets = {
-            'date_shot': forms.DateInput(attrs={'class':'datepicker'}),
+            'date_shot': forms.DateInput(attrs={'class':'datepicker',
+                                                'id':'video_date_field'}),
             'tags':forms.CheckboxSelectMultiple(),
         }
 
@@ -37,6 +38,7 @@ class new_vr_form(ModelForm):
                   'lon'
                   ]
         widgets = {
-            'date_shot': forms.DateInput(attrs={'class': 'datepicker'}),
+            'date_shot': forms.DateInput(attrs={'class': 'datepicker',
+                                                'id':'vr_date_field'}),
             'tags': forms.CheckboxSelectMultiple(),
         }
