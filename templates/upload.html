@@ -6,8 +6,10 @@
 
 <!-- Start Video Upload section -->
 
-<div class="row well well-lg">
+<h2><a href="#video_form_section" data-toggle="collapse">Upload a New Video</a></h2>
+<div class="row well well-lg collapse" id="video_form_section">
     <div class="col-md-12 col-sm-12 col-xs-12">
+        <p>Video Shot Form</p>
         {% if messages %}
         <div class="alert alert-success" role="alert">
             {% for message in messages %}
@@ -15,7 +17,6 @@
             {% endfor %}
         </div>
         {% endif %}
-        <h2>Upload a New Video</h2>
         <p><a href="http://www.latlong.net/" target="_blank">Latitude/Longtiude Help</a></p>
         <p><a href="#">Create new album</a></p>
         <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
@@ -152,10 +153,10 @@
 <!-- End Video Upload section -->
 
 <!-- Start VR Upload section -->
-
-<div class="row well well-lg">
+<h2><a href="#vr_form_section" data-toggle="collapse">Upload a New VR Shot</a></h2>
+<div class="row well well-lg collapse" id="vr_form_section">
     <div class="col-md-12 col-sm-12 col-xs-12">
-        <h2>Upload a New VR Shot</h2>
+        <p>VR Shot Form</p>
         <p><a href="http://www.latlong.net/" target="_blank">Latitude/Longtiude Help</a></p>
         <p><a href="#">Create new album</a></p>
         <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
