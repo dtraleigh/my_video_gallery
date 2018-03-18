@@ -301,8 +301,8 @@ $(document).ready(function(){
 {%endfor%}
 {%for qloc in quick_locations%}
         $("#{{qloc.htmlid}}_vr").click(function() {
-          $("#id_lon").val({{qloc.lon}});
-          $("#id_lat").val({{qloc.lat}});
+          $("#id_lon_vr").val({{qloc.lon}});
+          $("#id_lat_vr").val({{qloc.lat}});
         });
 {%endfor%}
 });

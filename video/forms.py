@@ -41,4 +41,6 @@ class new_vr_form(ModelForm):
             'date_shot': forms.DateInput(attrs={'class': 'datepicker',
                                                 'id':'vr_date_field'}),
             'tags': forms.CheckboxSelectMultiple(),
+            'lat': forms.NumberInput(attrs={'id': 'id_lat_vr'}),
+            'lon': forms.NumberInput(attrs={'id': 'id_lon_vr'})
         }
