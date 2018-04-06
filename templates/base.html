@@ -46,7 +46,7 @@
             <li class="active">
             	<a href="/main/">Home</a>
             </li>
-			{%if user.username == "cophead567"%}
+			{%if user.is_staff == True%}
 				<li id="upload"><a href="/main/upload/">Upload</a></li>
 			{%endif%}
 			<li><a href="/logout/">Logout</a></li>
