@@ -32,15 +32,11 @@
                     {{ upload_form.tags.errors }}
                 </div>
                 {% endif %}
-                <h5><strong>Tags</strong></h5>
-                {% for box in upload_form.tags %}
-                <div class="checkbox col-sm-2">
-                    <label for="{{ box.id_for_label }}">
-                        {{ box.tag }}
-                        {{ box.choice_label }}
-                    </label>
+                <div class="fieldWrapper">
+                    {{ upload_form.tags.errors }}
+                    <label for="{{ upload_form.tags.id_for_label }}">Tags</label>
+                    {{ upload_form.tags }}
                 </div>
-                {% endfor %}
             </div>
             <div class="form-group">
                 {%if upload_form.album.errors%}
