@@ -4,7 +4,7 @@ from video.models import video, album, vr_shot
 
 
 class new_video_form(ModelForm):
-    album = forms.ModelMultipleChoiceField(queryset=album.objects.all(), widget=forms.CheckboxSelectMultiple())
+    album = forms.ModelMultipleChoiceField(queryset=album.objects.all(), widget=forms.SelectMultiple())
 
     class Meta:
         model = video

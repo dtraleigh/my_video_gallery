@@ -62,6 +62,12 @@ body {
   color: white;
   margin: 15px;
 }
+.multi-selects{
+    height:200px !important;
+}
+#qloc-row{
+    padding:0px 0 20px 190px;
+}
 @media (max-width: 768px) {
   .album-poster-recent{
     width: 100%;
