@@ -153,49 +153,45 @@
 <h2><a href="#vr_form_section" data-toggle="collapse">Upload a New VR Shot</a></h2>
 <div class="row well well-lg collapse" id="vr_form_section">
     <div class="col-md-12 col-sm-12 col-xs-12">
-        <p>VR Shot Form</p>
         <p><a href="http://www.latlong.net/" target="_blank">Latitude/Longtiude Help</a></p>
-        <p><a href="#">Create new album</a></p>
         <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {%if upload_vr_form.non_field_errors%}
-            <div class="alert alert-danger" role="alert">
-                {{ upload_vr_form.non_field_errors }}
-            </div>
-            {% endif %}
-            <div class="form-group">
-                {%if upload_vr_form.tags.errors%}
-                <div class="alert alert-danger" role="alert">
-                    {{ upload_vr_form.tags.errors }}
-                </div>
-                {% endif %}
-                <h5><strong>Tags</strong></h5>
-                {% for box2 in upload_vr_form.tags %}
-                <div class="checkbox col-sm-2">
-                    <label for="{{ box2.id_for_label }}">
-                        {{ box2.tag }}
-                        {{ box2.choice_label }}
-                    </label>
-                </div>
-                {% endfor %}
-            </div>
-            <div class="form-group">
-                {%if upload_vr_form.album.errors%}
-                <div class="alert alert-danger" role="alert">
-                    {{ upload_vr_form.album.errors }}
-                </div>
-                {% endif %}
-                <h5><strong>Albums</strong></h5>
-                {% for a2 in upload_vr_form.album %}
-                <div class="checkbox col-sm-2">
-                    <label for="{{ a2.id_for_label }}">
-                        {{ a2.tag }}
-                        {{ a2.choice_label }}
-                    </label>
-                </div>
-                {% endfor %}
-            </div>
             <div class="well">
+                {% csrf_token %}
+                {%if upload_vr_form.non_field_errors%}
+                <div class="alert alert-danger" role="alert">
+                    {{ upload_vr_form.non_field_errors }}
+                </div>
+                {% endif %}
+                <div class="form-group">
+                    {%if upload_vr_form.tags.errors%}
+                    <div class="alert alert-danger" role="alert">
+                        {{ upload_vr_form.tags.errors }}
+                    </div>
+                    {% endif %}
+                    <div class="fieldWrapper">
+                        {{ upload_vr_form.tags.errors }}
+                        <label class="col-sm-2 control-label" for="{{ upload_vr_form.tags.id_for_label }}">Tags</label>
+                        <div class="col-sm-6">
+                            {{ upload_vr_form.tags|add_class:"form-control multi-selects" }}
+                        </div>
+                    </div>
+                    <a href="#"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+                </div>
+                <div class="form-group">
+                    {%if upload_vr_form.album.errors%}
+                    <div class="alert alert-danger" role="alert">
+                        {{ upload_vr_form.album.errors }}
+                    </div>
+                    {% endif %}
+                    <div class="fieldWrapper">
+                        {{ upload_vr_form.album.errors }}
+                        <label class="col-sm-2 control-label" for="{{ upload_vr_form.album.id_for_label }}">Albums</label>
+                        <div class="col-sm-6">
+                            {{ upload_vr_form.album|add_class:"form-control multi-selects" }}
+                        </div>
+                    </div>
+                    <a href="#"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+                </div>
                 <div class="form-group">
                     {%if upload_vr_form.name.errors%}
                     <div class="alert alert-danger" role="alert">
@@ -273,7 +269,7 @@
                         {{ upload_vr_form.vr_file.errors }}
                     </div>
                     {% endif %}
-                    <label class="col-sm-2 control-label" for="{{ upload_form.video_file.id_for_label }}">VR Shot
+                    <label class="col-sm-2 control-label" for="{{ upload_vr_form.video_file.id_for_label }}">VR Shot
                         File</label>
                     <div class="col-sm-6">
                         {{ upload_vr_form.vr_file }}

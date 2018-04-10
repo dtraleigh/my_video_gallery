@@ -24,7 +24,7 @@ class new_video_form(ModelForm):
 
 
 class new_vr_form(ModelForm):
-    album = forms.ModelMultipleChoiceField(queryset=album.objects.all(), widget=forms.CheckboxSelectMultiple())
+    album = forms.ModelMultipleChoiceField(queryset=album.objects.all(), widget=forms.SelectMultiple())
 
     class Meta:
         model = vr_shot
@@ -40,7 +40,7 @@ class new_vr_form(ModelForm):
         widgets = {
             'date_shot': forms.DateInput(attrs={'class': 'datepicker',
                                                 'id': 'vr_date_field'}),
-            'tags': forms.CheckboxSelectMultiple(),
+            'tags': forms.SelectMultiple(),
             'lat': forms.NumberInput(attrs={'id': 'id_lat_vr'}),
             'lon': forms.NumberInput(attrs={'id': 'id_lon_vr'})
         }
