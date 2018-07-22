@@ -3,13 +3,17 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 
 from video.models import *
 from video.forms import *
 
 from itertools import chain
 from operator import attrgetter
-import logging
+import logging, pytz
+from datetime import datetime
+from datetime import timedelta
+
 logger = logging.getLogger('video_log')
 
 
@@ -163,7 +167,14 @@ def upload(request):
                 return HttpResponseRedirect('/main/')
 
     else:
-        upload_form = new_video_form()
+        # Want to prefill the lat and lon with the last video upload session's values.
+        # If the most recently uploaded video was within the last hour, prefill it's lat lon
+        recently_uploaded_video = video.objects.latest('date_added')
+        if recently_uploaded_video.date_added > timezone.now() - timedelta(hours=1):
+            upload_form = new_video_form(initial={'lat': recently_uploaded_video.lat, 'lon': recently_uploaded_video.lon})
+        else:
+            upload_form = new_video_form()
+
         upload_vr_form = new_vr_form()
 
     quick_locations = location.objects.all()
