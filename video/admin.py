@@ -3,8 +3,7 @@ from video.models import *
 
 
 class video_admin(admin.ModelAdmin):
-    list_display = ('name', 'date_added', 'date_shot', 'poster', 'video_file')
-
+    list_display = ('name', 'date_added', 'date_shot', 'poster', 'video_file', 'get_tags')
 
 class vr_shot_admin(admin.ModelAdmin):
     list_display = ('name', 'date_added', 'date_shot', 'poster', 'vr_file')
