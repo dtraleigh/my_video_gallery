@@ -262,17 +262,18 @@ def video_tag_view(request, tag_name, shot_type, shot_id):
     # The shot the user wants to see
     if shot_type == "video":
         this_shot = video.objects.get(id=shot_id)
+        # All shots that have this tag
+        shots_w_tag = video.objects.filter(tags__name=tag_name)
     elif shot_type == "vr":
         this_shot = vr_shot.objects.get(id=shot_id)
+        # All shots that have this tag
+        shots_w_tag = vr_shot.objects.filter(tags__name=tag_name)
 
     # The tag the user clicked on
     the_tag = tag.objects.get(name=tag_name)
 
     # This shot's tags
     shot_tags = [t for t in this_shot.tags.all()]
-
-    # All shots that have this tag
-    shots_w_tag = video.objects.filter(tags__name=tag_name)
 
     if not is_most_recent(this_shot, shots_w_tag):
         next_video = get_next_shot(this_shot, shots_w_tag)
@@ -338,3 +339,40 @@ def recent_view(request, shot_type, shot_id):
                                          'no_next': no_next,
                                          'no_prev': no_prev,
                                          'recent_view': recent_view})
+
+
+@login_required(redirect_field_name='next')
+def shot_edit_view(request, shot_type, shot_id):
+    if shot_type == 'video':
+        shot_to_edit = video.objects.get(id = shot_id)
+    if shot_type == 'vr' or shot_type == 'vr_shot':
+        shot_to_edit = vr_shot.objects.get(id=shot_id)
+
+    if request.method == 'POST':
+        if shot_type == 'video':
+            edit_form = edit_video_form(request.POST, instance=shot_to_edit)
+        if shot_type == 'vr' or shot_type == 'vr_shot':
+            edit_form = edit_vr_form(request.POST, instance=shot_to_edit)
+
+        if 'cancel-button' in request.POST:
+            messages.info(request, 'Canceled edit to ' + shot_to_edit.name + '.')
+
+            return HttpResponseRedirect('/main/')
+
+        if edit_form.is_valid():
+            edit_form.save()
+            messages.success(request, 'Details for ' + shot_to_edit.name + ' updated.')
+
+            if 'save_video_and_main' in request.POST:
+                return HttpResponseRedirect('/main/')
+
+    else:
+        if shot_type == 'video':
+            edit_form = edit_video_form(instance=shot_to_edit)
+        if shot_type == 'vr' or shot_type == 'vr_shot':
+            edit_form = edit_vr_form(instance=shot_to_edit)
+
+    quick_locations = location.objects.all()
+
+    return render(request, 'edit.html', {'edit_form': edit_form,
+                                         'quick_locations': quick_locations})

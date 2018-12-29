@@ -9,7 +9,11 @@
     {%for video in videos_w_tag%}
     <div class="col-sm-6 col-xs-12">
       <div class="well well-lg">
-        <a href="/tag/{{the_tag.name}}/video/{{video.id}}">
+        {%if video.get_cname == "video"%}
+          <a href="/tag/{{the_tag.name}}/video/{{video.id}}">
+        {%elif video.get_cname == "vr_shot"%}
+          <a href="/tag/{{the_tag.name}}/vr/{{video.id}}">
+        {%endif%}
           <div class="album-poster" style="background-image:url({{ MEDIA_URL }}/{{video.poster}});"></div>
         </a>
         <h4>{{video.name}}</h4>
