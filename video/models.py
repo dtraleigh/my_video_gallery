@@ -42,6 +42,7 @@ class vr_shot(models.Model):
     # VR shots are ordered in descending order by the date they were taken. (newest to oldest)
     class Meta:
         ordering = ['-date_shot']
+        verbose_name = 'VR Shot'
 
     def __str__(self):
         return '%s, taken on %s' % (self.name, self.date_shot)
