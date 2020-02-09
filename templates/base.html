@@ -16,16 +16,26 @@
 	<!-- Custom styles for this template -->
 	<link href="{% static "css/video-custom.css" %}" rel="stylesheet">
 
-	<!-- Video.js -->
-	<link href="https://vjs.zencdn.net/6.6.0/video-js.css" rel="stylesheet">
+	<!-- Video.js and plugins -->
+	<script src="https://vjs.zencdn.net/7.5.5/video.js"></script>
+	<link href="https://vjs.zencdn.net/7.5.5/video-js.css" rel="stylesheet" />
+	<script>
+	   window.SILVERMINE_VIDEOJS_CHROMECAST_CONFIG = {
+		  preloadWebComponents: true,
+	   };
+	</script>
+	<script src="{% static "js/silvermine-videojs-chromecast.min.js" %}"></script>
+	<script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
 
 	<!-- JQuery custom css -->
 	<link href="{% static "js/jquery-ui.min.css" %}" rel="stylesheet">
 
+	<!-- videojs-chromecast css -->
+	<link href="{% static "css/silvermine-videojs-chromecast.css" %}" rel="stylesheet">
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
     <script src="{% static "js/bootstrap.min.js" %}"></script>
-	<script src="https://vjs.zencdn.net/6.6.0/video.js"></script>
 	<script src="{% static "js/jquery-ui.min.js" %}""></script>
 </head>
 	<body>
@@ -73,6 +83,11 @@
       yearRange: "1980:2020",
     });
   });
+  </script>
+  <script>
+    var player = videojs(document.getElementById('my-video'));
+
+    player.chromecast();
   </script>
 </body>
 </html>
