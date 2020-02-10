@@ -47,9 +47,9 @@ def get_prev_shot(curr_shot, shot_list):
     return prev_shot
 
 
-def combine_and_sort(vr_list, video_list):
+def combine_and_sort(vr_list, video_list, all_external):
     shots_sorted = sorted(
-        chain(vr_list, video_list),
+        chain(vr_list, video_list, all_external),
         key=attrgetter('date_shot'))
 
     return shots_sorted[::-1]
@@ -94,38 +94,19 @@ def video_logout(request):
 
 @login_required(redirect_field_name='next')
 def main(request):
-    tag_list = tag.objects.all()
     albums = album.objects.all()
 
     all_videos = [v for v in video.objects.all()]
     all_vr = [vr for vr in vr_shot.objects.all()]
+    all_external = [ex for ex in external_video.objects.all()]
 
-    all_shots = combine_and_sort(all_vr, all_videos)
+    all_shots = combine_and_sort(all_vr, all_videos, all_external)
 
     # most_recent means the 6 most recently shot (not uploaded) files
     most_recent = all_shots[0:6]
 
-    # We need the albums to be sorted by the videos within most recently added date_added
-    albums_most_recent_list = []
-
-    for an_album in albums:
-        # If not empty album
-        if len(an_album.videos.all()) > 0:
-            albums_most_recent = an_album.videos.latest('date_added')
-
-            albums_most_recent_list.append([str(albums_most_recent.date_added), an_album])
-
-    # Sort by date_added in descending order
-    albums_sorted_w_date = sorted(albums_most_recent_list, key=lambda x: x[0], reverse=True)
-
-    # Get a list of just the albums now that they are sorted by date_added
-    sorted_albums = []
-
-    for a in albums_sorted_w_date:
-        sorted_albums.append(a[1])
-
-    return render(request, 'index.html', {'albums': sorted_albums,
-                                          'tag_list': tag_list,
+    return render(request, 'index.html', {'albums': albums,
+                                          'tag_list': tag.objects.all(),
                                           'most_recent': most_recent})
 
 
@@ -186,15 +167,14 @@ def upload(request):
 
 @login_required(redirect_field_name='next')
 def album_view(request, album_id):
-    video_and_vr_album = album.objects.get(id=album_id)
+    all_albums = album.objects.get(id=album_id)
 
-    album_videos = [v for v in video_and_vr_album.videos.all()]
-    album_vrs = [vr for vr in video_and_vr_album.vr_shots.all()]
+    album_videos = [v for v in all_albums.videos.all()]
+    album_vrs = [vr for vr in all_albums.vr_shots.all()]
+    album_externals = [ex for ex in all_albums.external_videos.all()]
 
-    content = combine_and_sort(album_vrs, album_videos)
-
-    return render(request, 'album.html', {'album': video_and_vr_album,
-                                          'album_videos': content})
+    return render(request, 'album.html', {'album': all_albums,
+                                          'album_videos': combine_and_sort(album_vrs, album_videos, album_externals)})
 
 
 @login_required(redirect_field_name='next')
@@ -204,17 +184,18 @@ def shot_view(request, album_id, shot_type, shot_id):
         this_shot = video.objects.get(id=shot_id)
     elif shot_type == "vr":
         this_shot = vr_shot.objects.get(id=shot_id)
+    elif shot_type == "external":
+        this_shot = external_video.objects.get(id=shot_id)
 
     # The album the user is within
-    video_and_vr_album = album.objects.get(id=album_id)
+    all_albums = album.objects.get(id=album_id)
 
-    album_videos = [v for v in video_and_vr_album.videos.all()]
-    album_vrs = [vr for vr in video_and_vr_album.vr_shots.all()]
+    album_videos = [v for v in all_albums.videos.all()]
+    album_vrs = [vr for vr in all_albums.vr_shots.all()]
+    album_external = [ex for ex in all_albums.external_videos.all()]
 
     # All the shots within this album
-    album_shots = combine_and_sort(album_vrs, album_videos)
-
-    shot_tags = [t for t in this_shot.tags.all()]
+    album_shots = combine_and_sort(album_vrs, album_videos, album_external)
 
     if not is_most_recent(this_shot, album_shots):
         next_video = get_next_shot(this_shot, album_shots)
@@ -230,13 +211,11 @@ def shot_view(request, album_id, shot_type, shot_id):
         prev_video = this_shot
         no_prev = True
 
-    album_view = True
-
     return render(request, 'shot.html', {'video': this_shot,
-                                         'album': video_and_vr_album,
+                                         'album': all_albums,
                                          'album_videos': album_shots,
-                                         'video_tags': shot_tags,
-                                         'album_view': album_view,
+                                         'video_tags': [t for t in this_shot.tags.all()],
+                                         'album_view': True,
                                          'next_video': next_video,
                                          'no_next': no_next,
                                          'no_prev': no_prev,
@@ -247,14 +226,13 @@ def shot_view(request, album_id, shot_type, shot_id):
 def tag_view(request, tag_name):
     videos_w_tag = video.objects.filter(tags__name=tag_name)
     vr_w_tag = vr_shot.objects.filter(tags__name=tag_name)
+    externals_w_tag = external_video.objects.filter(tags__name=tag_name)
 
     # All the shots with this tag
-    videos_w_tag = combine_and_sort(videos_w_tag, vr_w_tag)
-
-    the_tag = tag.objects.get(name=tag_name)
+    videos_w_tag = combine_and_sort(videos_w_tag, vr_w_tag, externals_w_tag)
 
     return render(request, 'tag.html', {'videos_w_tag': videos_w_tag,
-                                        'the_tag': the_tag})
+                                        'the_tag': tag.objects.get(name=tag_name)})
 
 
 @login_required(redirect_field_name='next')
@@ -262,18 +240,15 @@ def video_tag_view(request, tag_name, shot_type, shot_id):
     # The shot the user wants to see
     if shot_type == "video":
         this_shot = video.objects.get(id=shot_id)
-        # All shots that have this tag
-        shots_w_tag = video.objects.filter(tags__name=tag_name)
     elif shot_type == "vr":
         this_shot = vr_shot.objects.get(id=shot_id)
-        # All shots that have this tag
-        shots_w_tag = vr_shot.objects.filter(tags__name=tag_name)
+    elif shot_type == "external":
+        this_shot = external_video.objects.get(id=shot_id)
 
-    # The tag the user clicked on
-    the_tag = tag.objects.get(name=tag_name)
-
-    # This shot's tags
-    shot_tags = [t for t in this_shot.tags.all()]
+    videos_w_tag = video.objects.filter(tags__name=tag_name)
+    vrs_w_tag = vr_shot.objects.filter(tags__name=tag_name)
+    externals_w_tag = external_video.objects.filter(tags__name=tag_name)
+    shots_w_tag = combine_and_sort(vrs_w_tag, videos_w_tag, externals_w_tag)
 
     if not is_most_recent(this_shot, shots_w_tag):
         next_video = get_next_shot(this_shot, shots_w_tag)
@@ -289,12 +264,10 @@ def video_tag_view(request, tag_name, shot_type, shot_id):
         prev_video = this_shot
         no_prev = True
 
-    tag_view = True
-
     return render(request, 'shot.html', {'video': this_shot,
-                                         'the_tag': the_tag,
-                                         'video_tags': shot_tags,
-                                         'tag_view': tag_view,
+                                         'the_tag': tag.objects.get(name=tag_name),
+                                         'video_tags': [t for t in this_shot.tags.all()],
+                                         'tag_view': True,
                                          'next_video': next_video,
                                          'no_next': no_next,
                                          'no_prev': no_prev,
@@ -308,13 +281,14 @@ def recent_view(request, shot_type, shot_id):
         this_shot = video.objects.get(id=shot_id)
     elif shot_type == "vr":
         this_shot = vr_shot.objects.get(id=shot_id)
+    elif shot_type == "external":
+        this_shot = external_video.objects.get(id=shot_id)
 
     all_videos = video.objects.all()
     all_vr = vr_shot.objects.all()
+    all_external = external_video.objects.all()
 
-    all_shots = combine_and_sort(all_vr, all_videos)
-
-    video_tags = [t for t in this_shot.tags.all()]
+    all_shots = combine_and_sort(all_vr, all_videos, all_external)
 
     if not is_most_recent(this_shot, all_shots):
         next_video = get_next_shot(this_shot, all_shots)
@@ -330,15 +304,13 @@ def recent_view(request, shot_type, shot_id):
         prev_video = this_shot
         no_prev = True
 
-    recent_view = True
-
     return render(request, 'shot.html', {'video': this_shot,
-                                         'video_tags': video_tags,
+                                         'video_tags': [t for t in this_shot.tags.all()],
                                          'next_video': next_video,
                                          'prev_video': prev_video,
                                          'no_next': no_next,
                                          'no_prev': no_prev,
-                                         'recent_view': recent_view})
+                                         'recent_view': True})
 
 
 @login_required(redirect_field_name='next')

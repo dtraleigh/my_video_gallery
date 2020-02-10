@@ -28,13 +28,16 @@
             <a href="/recent/vr/{{shot.id}}">
               <img class="album-poster-recent" src="{{ MEDIA_URL }}{{shot.poster}}">
             </a>
+          {%elif shot.get_cname == "external_video"%}
+            <a href="/recent/external/{{shot.id}}">
+              <img class="album-poster-recent" src="{{ MEDIA_URL }}{{shot.poster}}">
+            </a>
           {%endif%}
         {%endfor%}
     </div>
   </div>
 
   <h2>Current Video Albums</h2>
-  <p class="text-right"><span class="label label-info">Sorted by Most Recently added.</span></p>
 	{%for album in albums%}
   <div class="row well well-lg">
 		<div class="col-md-4 col-sm-4 col-xs-12">

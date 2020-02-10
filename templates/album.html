@@ -17,6 +17,10 @@
             <a href="/album/{{album.id}}/vr/{{shot.id}}">
               <div class="album-poster" style="background-image:url({{ MEDIA_URL }}/{{shot.poster}});"></div>
             </a>
+          {%elif shot.get_cname == "external_video"%}
+            <a href="/album/{{album.id}}/external/{{shot.id}}">
+              <div class="album-poster" style="background-image:url({{ MEDIA_URL }}/{{shot.poster}});"></div>
+            </a>
           {%endif%}
         <h4>{{shot.name}}</h4>
         {% autoescape off %}

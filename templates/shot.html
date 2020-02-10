@@ -19,7 +19,6 @@
   <div class="row">
     <div class="row well well-lg">
       <div class="col-md-6 col-sm-8 col-xs-12">
-
         {%if video.get_cname == "video"%}
         <!-- Start HTML5 video player -->
         <div class="embed-responsive embed-responsive-16by9">
@@ -33,7 +32,6 @@
           </video>
         </div>
         <!-- End HTML5 Video player -->
-
         {%elif video.get_cname == "vr_shot"%}
         <!-- Start vrview iframe -->
         <div class="embed-responsive embed-responsive-16by9">
@@ -46,6 +44,12 @@
           </iframe>
         </div>
         <!-- End vrview iframe -->
+        {%elif video.get_cname == "external_video"%}
+        <!-- put embed code here -->
+          {% autoescape off %}
+            {{video.embed_code}}
+          {% endautoescape %}
+        <!-- end embed code -->
         {%endif%}
       </div>
       <div class="col-md-6 col-sm-4 col-xs-12">
@@ -115,18 +119,24 @@
                       <a href="/album/{{album.id}}/video/{{next_video.id}}" class="thumbnail">
                     {%elif next_video.get_cname == "vr_shot"%}
                       <a href="/album/{{album.id}}/vr/{{next_video.id}}" class="thumbnail">
+                    {%elif next_video.get_cname == "external_video"%}
+                      <a href="/album/{{album.id}}/external/{{next_video.id}}" class="thumbnail">
                     {%endif%}
                 {%elif tag_view%}
                     {%if next_video.get_cname == "video"%}
                       <a href="/tag/{{the_tag.name}}/video/{{next_video.id}}" class="thumbnail">
                     {%elif next_video.get_cname == "vr_shot"%}
                       <a href="/tag/{{the_tag.name}}/vr/{{next_video.id}}" class="thumbnail">
+                    {%elif next_video.get_cname == "external_video"%}
+                      <a href="/tag/{{the_tag.name}}/external/{{next_video.id}}" class="thumbnail">
                     {%endif%}
                 {%elif recent_view%}
                     {%if next_video.get_cname == "video"%}
                       <a href="/recent/video/{{next_video.id}}" class="thumbnail">
                     {%elif next_video.get_cname == "vr_shot"%}
                       <a href="/recent/vr/{{next_video.id}}" class="thumbnail">
+                    {%elif next_video.get_cname == "external_video"%}
+                      <a href="/recent/external/{{next_video.id}}" class="thumbnail">
                     {%endif%}
                 {%endif%}
                   <img src="{{ MEDIA_URL }}/{{next_video.poster}}" alt="...">
