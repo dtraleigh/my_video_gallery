@@ -87,18 +87,24 @@
                       <a href="/album/{{album.id}}/video/{{prev_video.id}}" class="thumbnail">
                     {%elif prev_video.get_cname == "vr_shot"%}
                       <a href="/album/{{album.id}}/vr/{{prev_video.id}}" class="thumbnail">
+                    {%elif prev_video.get_cname == "external_video"%}
+                      <a href="/album/{{album.id}}/external/{{prev_video.id}}" class="thumbnail">
                     {%endif%}
                 {%elif tag_view%}
                     {%if prev_video.get_cname == "video"%}
                       <a href="/tag/{{the_tag.name}}/video/{{prev_video.id}}" class="thumbnail">
                     {%elif prev_video.get_cname == "vr_shot"%}
                       <a href="/tag/{{the_tag.name}}/vr/{{prev_video.id}}" class="thumbnail">
+                    {%elif prev_video.get_cname == "external_video"%}
+                      <a href="/tag/{{the_tag.id}}/external/{{prev_video.id}}" class="thumbnail">
                     {%endif%}
                 {%elif recent_view%}
                     {%if prev_video.get_cname == "video"%}
                       <a href="/recent/video/{{prev_video.id}}" class="thumbnail">
                     {%elif prev_video.get_cname == "vr_shot"%}
                       <a href="/recent/vr/{{prev_video.id}}" class="thumbnail">
+                    {%elif prev_video.get_cname == "external_video"%}
+                      <a href="/recent/external/{{prev_video.id}}" class="thumbnail">
                     {%endif%}
                 {%endif%}
                   <img src="{{ MEDIA_URL }}/{{prev_video.poster}}" alt="...">
