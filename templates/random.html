@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+  {% block content %}
+  {% load staticfiles %}
+
+  <div class="row">
+    <div class="row well well-lg">
+      <div class="col-md-6 col-sm-8 col-xs-12">
+        {%if video.get_cname == "video"%}
+        <!-- Start HTML5 video player -->
+        <div class="embed-responsive embed-responsive-16by9">
+          <video id="my-video" class="video-js embed-responsive-item" controls preload="auto" width="640" height="264"
+          poster="{{ MEDIA_URL }}/{{video.poster}}" data-setup="{}">
+            <source src="{{ MEDIA_URL }}{{video.video_file}}" type='video/mp4'>
+            <p class="vjs-no-js">
+              To view this video please enable JavaScript, and consider upgrading to a web browser that
+              <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+            </p>
+          </video>
+        </div>
+        <!-- End HTML5 Video player -->
+        {%elif video.get_cname == "vr_shot"%}
+        <!-- Start vrview iframe -->
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe
+             frameborder="0"
+             width="100%"
+             scrolling="no"
+             allowfullscreen
+             src="{% static "vrview/index-minified.html" %}?image={{ MEDIA_URL }}{{video.vr_file}}&is_stereo=false">
+          </iframe>
+        </div>
+        <!-- End vrview iframe -->
+        {%elif video.get_cname == "external_video"%}
+        <!-- put embed code here -->
+          {% autoescape off %}
+            {{video.embed_code}}
+          {% endautoescape %}
+        <!-- end embed code -->
+        {%endif%}
+      </div>
+      <div class="col-md-6 col-sm-4 col-xs-12">
+        <h3>{{video.name}}</h3>
+        {% autoescape off %}
+        {%if user.is_staff == True%}
+          {%if video.get_cname == "video"%}
+            <a href="/edit/video/{{video.id}}">Edit</a>
+          {%elif video.get_cname == "vr_shot"%}
+            <a href="/edit/vr/{{video.id}}">Edit</a>
+          {%endif%}
+        {%endif%}
+        <p>{{video.description}}</p>
+        {%endautoescape%}
+        <p>Date Taken: <strong>{{video.date_shot}}</strong></p>
+        <strong>Tags</strong>
+        <p>
+        {%for tag in video_tags%}
+          <a class="btn btn-default" href="/tag/{{tag.name}}" role="button">{{tag.name}}</a>
+        {%endfor%}
+        </p>
+      </div>
+    </div>
+  </div>
+
+{%endblock content%}

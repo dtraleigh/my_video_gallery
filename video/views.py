@@ -4,13 +4,14 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.db.models import Max
 
 from video.models import *
 from video.forms import *
 
 from itertools import chain
 from operator import attrgetter
-import logging, pytz
+import logging, pytz, random
 from datetime import datetime
 from datetime import timedelta
 
@@ -53,6 +54,16 @@ def combine_and_sort(vr_list, video_list, all_external):
         key=attrgetter('date_shot'))
 
     return shots_sorted[::-1]
+
+
+def get_random_shot():
+    # since we have content spread across multiple models, let's just do video for now
+    max_id = video.objects.all().aggregate(max_id=Max("id"))['max_id']
+    while True:
+        pk = random.randint(1, max_id)
+        random_video = video.objects.filter(pk=pk).first()
+        if random_video:
+            return random_video
 
 
 def video_login(request):
@@ -348,3 +359,11 @@ def shot_edit_view(request, shot_type, shot_id):
 
     return render(request, 'edit.html', {'edit_form': edit_form,
                                          'quick_locations': quick_locations})
+
+
+@login_required(redirect_field_name='next')
+def random_shot_view(request):
+    random_shot = get_random_shot()
+
+    return render(request, 'random.html', {'video': random_shot,
+                                           'video_tags': [t for t in random_shot.tags.all()]})
