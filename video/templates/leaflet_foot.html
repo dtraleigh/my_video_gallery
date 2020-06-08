@@ -1,0 +1,9 @@
+<!-- Javascript for leaflet map -->
+    {% load staticfiles %}
+
+    <script type="text/javascript">
+        var video_map_data = {{video_map_data|safe}}
+        var vr_map_data = {{vr_map_data|safe}}
+        var external_map_data = {{external_map_data|safe}}
+    </script>
+    <script src="{% static "js/leaflet_map_custom.js"%}"></script>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Video Map</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+      }
+      .leaflet-container {
+        height: 100%;
+      }
+    </style>
+	{% load staticfiles %}
+	<link href="{% static "css/video-custom.css"%}" rel="stylesheet">
+
+    {% include "leaflet_head.html" %}
+
+    </head>
+    <body>
+    <div id="map" class="map_full"></div>
+
+    {% include "leaflet_foot.html" %}
+
+    </body>
+</html>

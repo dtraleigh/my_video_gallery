@@ -1,6 +1,14 @@
 body {
   padding-top: 65px;
 }
+.map_full {
+    height: 100%;
+    margin: 0;
+}
+.map_embed {
+    height: 400px;
+    margin: 0;
+}
 .login-wrapper {
   margin-top: 80px;
   margin-bottom: 80px;

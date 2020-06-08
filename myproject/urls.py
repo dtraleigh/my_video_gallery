@@ -6,6 +6,7 @@ urlpatterns = [
     path("admin", admin.site.urls),
     path(r"", views.video_login),
     path("main/", views.main),
+    path("map/", views.map_view),
     path("main/upload/", views.upload),
     path("random/", views.random_shot_view),
     path("logout/", views.video_logout),

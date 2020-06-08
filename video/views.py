@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.db.models import Max
+from django.core import serializers
 
 from video.models import *
 from video.forms import *
@@ -103,6 +104,20 @@ def video_logout(request):
     return HttpResponseRedirect('/')
 
 
+def get_map_data():
+    video_map_data = serializers.serialize("json",
+                                       video.objects.filter(lat__isnull=False, lon__isnull=False),
+                                       fields=("name", "date_shot", "lat", "lon"))
+    vr_map_data = serializers.serialize("json",
+                                    vr_shot.objects.filter(lat__isnull=False, lon__isnull=False),
+                                    fields=("name", "date_shot", "lat", "lon"))
+    external_map_data = serializers.serialize("json",
+                                          external_video.objects.filter(lat__isnull=False, lon__isnull=False),
+                                          fields=("name", "date_shot", "lat", "lon"))
+
+    return video_map_data, vr_map_data, external_map_data
+
+
 @login_required(redirect_field_name='next')
 def main(request):
     albums = album.objects.all()
@@ -119,6 +134,15 @@ def main(request):
     return render(request, 'index.html', {'albums': albums,
                                           'tag_list': tag.objects.all(),
                                           'most_recent': most_recent})
+
+
+@login_required(redirect_field_name='next')
+def map_view(request):
+    video_map_data, vr_map_data, external_map_data = get_map_data()
+
+    return render(request, "map.html", {"video_map_data": video_map_data,
+                                        "vr_map_data": vr_map_data,
+                                        "external_map_data": external_map_data})
 
 
 @login_required(redirect_field_name='next')
