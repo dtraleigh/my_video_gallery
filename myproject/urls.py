@@ -16,4 +16,5 @@ urlpatterns = [
     path("tag/<str:tag_name>", views.tag_view),
     path("recent/<str:shot_type>/<int:shot_id>", views.recent_view),
     path("edit/<str:shot_type>/<int:shot_id>", views.shot_edit_view),
+    path("map/<str:shot_type>/<int:shot_id>", views.map_shot),
 ]

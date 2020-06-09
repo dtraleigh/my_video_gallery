@@ -71,11 +71,12 @@
           <a class="btn btn-default" href="/tag/{{tag.name}}" role="button">{{tag.name}}</a>
         {%endfor%}
         </p>
-        {%if not no_prev and not no_next%}
-          <p><strong>Navigate</strong><p>
-        {%endif%}
-
-        {%include "prev_next_shot.html"%}
+        <p><strong>Navigate</strong><p>
+          <div id="map" class="map_embed"></div>
+            <script type="text/javascript">
+                var customLat = {{video.lat}}
+                var customLon = {{video.lon}}
+            </script>
 
       </div>
     </div>

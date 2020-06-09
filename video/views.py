@@ -106,14 +106,14 @@ def video_logout(request):
 
 def get_map_data():
     video_map_data = serializers.serialize("json",
-                                       video.objects.filter(lat__isnull=False, lon__isnull=False),
-                                       fields=("name", "date_shot", "lat", "lon"))
+                                           video.objects.filter(lat__isnull=False, lon__isnull=False),
+                                           fields=("name", "date_shot", "lat", "lon"))
     vr_map_data = serializers.serialize("json",
-                                    vr_shot.objects.filter(lat__isnull=False, lon__isnull=False),
-                                    fields=("name", "date_shot", "lat", "lon"))
+                                        vr_shot.objects.filter(lat__isnull=False, lon__isnull=False),
+                                        fields=("name", "date_shot", "lat", "lon"))
     external_map_data = serializers.serialize("json",
-                                          external_video.objects.filter(lat__isnull=False, lon__isnull=False),
-                                          fields=("name", "date_shot", "lat", "lon"))
+                                              external_video.objects.filter(lat__isnull=False, lon__isnull=False),
+                                              fields=("name", "date_shot", "lat", "lon"))
 
     return video_map_data, vr_map_data, external_map_data
 
@@ -187,7 +187,8 @@ def upload(request):
         # If the most recently uploaded video was within the last hour, prefill it's lat lon
         recently_uploaded_video = video.objects.latest('date_added')
         if recently_uploaded_video.date_added > timezone.now() - timedelta(hours=1):
-            upload_form = new_video_form(initial={'lat': recently_uploaded_video.lat, 'lon': recently_uploaded_video.lon})
+            upload_form = new_video_form(
+                initial={'lat': recently_uploaded_video.lat, 'lon': recently_uploaded_video.lon})
         else:
             upload_form = new_video_form()
 
@@ -351,7 +352,7 @@ def recent_view(request, shot_type, shot_id):
 @login_required(redirect_field_name='next')
 def shot_edit_view(request, shot_type, shot_id):
     if shot_type == 'video':
-        shot_to_edit = video.objects.get(id = shot_id)
+        shot_to_edit = video.objects.get(id=shot_id)
     if shot_type == 'vr' or shot_type == 'vr_shot':
         shot_to_edit = vr_shot.objects.get(id=shot_id)
 
@@ -391,3 +392,22 @@ def random_shot_view(request):
 
     return render(request, 'random.html', {'video': random_shot,
                                            'video_tags': [t for t in random_shot.tags.all()]})
+
+
+@login_required(redirect_field_name="next")
+def map_shot(request, shot_type, shot_id):
+    # The shot the user wants to see
+    if shot_type == "video":
+        this_shot = video.objects.get(id=shot_id)
+    elif shot_type == "vr":
+        this_shot = vr_shot.objects.get(id=shot_id)
+    elif shot_type == "external":
+        this_shot = external_video.objects.get(id=shot_id)
+
+    video_map_data, vr_map_data, external_map_data = get_map_data()
+
+    return render(request, "map_shot.html", {"video": this_shot,
+                                             "video_tags": [t for t in this_shot.tags.all()],
+                                             "video_map_data": video_map_data,
+                                             "vr_map_data": vr_map_data,
+                                             "external_map_data": external_map_data})
