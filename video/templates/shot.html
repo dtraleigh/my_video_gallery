@@ -57,9 +57,11 @@
         {% autoescape off %}
         {%if user.is_staff == True%}
           {%if video.get_cname == "video"%}
-            <a href="/edit/video/{{video.id}}">Edit</a>
+            <a href="/edit/video/{{video.id}}?from={{request.path|urlencode}}">Edit</a>
           {%elif video.get_cname == "vr_shot"%}
-            <a href="/edit/vr/{{video.id}}">Edit</a>
+            <a href="/edit/vr/{{video.id}}?from={{request.path|urlencode}}">Edit</a>
+          {%elif video.get_cname == "external_video"%}
+            <a href="/edit/external/{{video.id}}?from={{request.path|urlencode}}">Edit</a>
           {%endif%}
         {%endif%}
         <p>{{video.description}}</p>

@@ -17,7 +17,7 @@
 <div class="row well well-lg" id="video_form_section">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <p><a href="https://www.latlong.net/" target="_blank">Latitude/Longtiude Help</a></p>
-        <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+        <form class="form-horizontal" action="{% if from %}?next={{ from }}{% endif %}" method="post" enctype="multipart/form-data">
             <div class="well">
                 {% csrf_token %}
                 {%if edit_form.non_field_errors%}
@@ -113,6 +113,8 @@
                     </div>
                 </div>
             </div>
+            <input class="btn btn-primary btn-lg" type="submit" name="save_shot"
+                   value="Save"/>
             <input class="btn btn-primary btn-lg" type="submit" name="save_video_and_main"
                    value="Save and Back to Main"/>
             <button type="submit" class="btn btn-lg btn-default" name="cancel-button">Cancel</button>

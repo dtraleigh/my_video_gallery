@@ -1,11 +1,11 @@
 // leaflet map
-if (typeof customLat == 'undefined') {
+if (customLat == undefined) {
     var setViewLat = 35.7785733;
 } else {
     var setViewLat = customLat;
 }
 
-if (typeof customLon == 'undefined') {
+if (customLon == undefined) {
     var setViewLon = -78.6395438;
 } else {
     var setViewLon = customLon;

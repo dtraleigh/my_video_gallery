@@ -25,8 +25,8 @@
     <body>
     <div id="map" class="map_full"></div>
     <script type="text/javascript">
-        var customLat = 'undefined'
-        var customLon = 'undefined'
+        var customLat = (function () { return; })();
+        var customLon = (function () { return; })();
     </script>
     {% include "leaflet_foot.html" %}
 
