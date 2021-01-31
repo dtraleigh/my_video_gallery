@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="description" content="">
 		<meta name="author" content="">
-		{% load staticfiles %}
+		{% load static %}
 		<link rel="shortcut icon" type="image/png" href="{% static "img/video-camera.png" %}">
 
 		<title>Leo and Jen - The Video Gallery</title>
@@ -17,8 +17,7 @@
 		<link href="{% static "css/video-custom.css" %}" rel="stylesheet">
 
 		<!-- Video.js and plugins -->
-		<script src="https://vjs.zencdn.net/7.5.5/video.js"></script>
-		<link href="https://vjs.zencdn.net/7.5.5/video-js.css" rel="stylesheet" />
+		<link href="https://vjs.zencdn.net/7.10.2/video-js.css" rel="stylesheet" />
 		<script>
 		   window.SILVERMINE_VIDEOJS_CHROMECAST_CONFIG = {
 			  preloadWebComponents: true,
@@ -83,12 +82,13 @@
 	    <div class="footer">
 	    </div>
   </div> <!-- /container -->
-	<script>
+  <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
+  <script>
   $(function() {
     $( ".datepicker" ).datepicker({
       changeMonth: true,
       changeYear: true,
-      yearRange: "1980:2020",
+      yearRange: "1980:2022",
     });
   });
   </script>
