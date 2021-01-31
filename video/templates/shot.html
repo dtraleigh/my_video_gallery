@@ -32,18 +32,6 @@
           </video>
         </div>
         <!-- End HTML5 Video player -->
-        {%elif video.get_cname == "vr_shot"%}
-        <!-- Start vrview iframe -->
-        <div class="embed-responsive embed-responsive-16by9">
-          <iframe
-             frameborder="0"
-             width="100%"
-             scrolling="no"
-             allowfullscreen
-             src="{% static "vrview/index-minified.html" %}?image={{ MEDIA_URL }}{{video.vr_file}}&is_stereo=false">
-          </iframe>
-        </div>
-        <!-- End vrview iframe -->
         {%elif video.get_cname == "external_video"%}
         <!-- put embed code here -->
           {% autoescape off %}
@@ -58,8 +46,6 @@
         {%if user.is_staff == True%}
           {%if video.get_cname == "video"%}
             <a href="/edit/video/{{video.id}}?from={{request.path|urlencode}}">Edit</a>
-          {%elif video.get_cname == "vr_shot"%}
-            <a href="/edit/vr/{{video.id}}?from={{request.path|urlencode}}">Edit</a>
           {%elif video.get_cname == "external_video"%}
             <a href="/edit/external/{{video.id}}?from={{request.path|urlencode}}">Edit</a>
           {%endif%}
@@ -78,7 +64,11 @@
         {%endif%}
 
         {%include "prev_next_shot.html"%}
-
+        <div id="map" class="map_embed"></div>
+            <script type="text/javascript">
+                var customLat = {{video.lat}}
+                var customLon = {{video.lon}}
+            </script>
       </div>
     </div>
   </div>

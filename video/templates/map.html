@@ -19,10 +19,19 @@
 	{% load static %}
 	<link href="{% static "css/video-custom.css"%}" rel="stylesheet">
 
+    <!-- Bootstrap core CSS -->
+    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static "css/video-custom.css" %}" rel="stylesheet">
+
     {% include "leaflet_head.html" %}
 
     </head>
     <body>
+
+    {% include "nav.html" %}
+
     <div id="map" class="map_full"></div>
     <script type="text/javascript">
         var customLat = (function () { return; })();

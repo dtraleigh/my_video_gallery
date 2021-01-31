@@ -35,16 +35,6 @@ for (var i = 0; i < video_map_data.length; ++i){
   markerClusters.addLayer(m);
 }
 
-// Add vr to markerClusters
-for (var i = 0; i < vr_map_data.length; ++i){
-  var popup = vr_map_data[i].fields.name + " [<a href=\"/map/vr/" + vr_map_data[i].pk + "\">🎥</a>]";
-
-  var m = L.marker([vr_map_data[i].fields.lat, vr_map_data[i].fields.lon])
-                  .bindPopup(popup);
-
-  markerClusters.addLayer(m);
-}
-
 // Add externals to markerClusters
 for (var i = 0; i < external_map_data.length; ++i){
   var popup = external_map_data[i].fields.name + " [<a href=\"/map/external/" + external_map_data[i].pk + "\">🎥</a>]";

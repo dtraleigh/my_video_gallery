@@ -11,8 +11,6 @@
       <div class="well well-lg">
         {%if video.get_cname == "video"%}
           <a href="/tag/{{the_tag.name}}/video/{{video.id}}">
-        {%elif video.get_cname == "vr_shot"%}
-          <a href="/tag/{{the_tag.name}}/vr/{{video.id}}">
         {%elif video.get_cname == "external_video"%}
           <a href="/tag/{{the_tag.name}}/external/{{video.id}}">
         {%endif%}

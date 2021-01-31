@@ -24,10 +24,6 @@
             <a href="/recent/video/{{shot.id}}">
               <img class="album-poster-recent" src="{{ MEDIA_URL }}{{shot.poster}}">
             </a>
-          {%elif shot.get_cname == "vr_shot"%}
-            <a href="/recent/vr/{{shot.id}}">
-              <img class="album-poster-recent" src="{{ MEDIA_URL }}{{shot.poster}}">
-            </a>
           {%elif shot.get_cname == "external_video"%}
             <a href="/recent/external/{{shot.id}}">
               <img class="album-poster-recent" src="{{ MEDIA_URL }}{{shot.poster}}">
